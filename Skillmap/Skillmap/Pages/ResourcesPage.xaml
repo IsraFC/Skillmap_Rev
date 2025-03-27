@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Página de contenido para la sección de Recursos -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Pages.ResourcesPage"
+             Title="Resources Page"
+             BackgroundColor="#ECECEC">
+
+    <!-- ScrollView permite desplazamiento si el contenido excede el tamaño de la pantalla -->
+        <ScrollView>
+        <VerticalStackLayout Padding="10"> <!-- Contenedor principal en formato de pila vertical -->
+
+            <!-- Título de la página -->
+            <Label Text="📂 Listado De Recursos"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Start"
+                   TextColor="Black"
+                   />
+
+            <SearchBar x:Name="searchBar"
+                       Placeholder="Buscar recursos..."
+                       BackgroundColor="#EFEFEF"
+                       TextColor="Black"
+                       Margin="0,10,0,10"
+                       TextChanged="OnSearchTextChanged"/>
+
+            <!-- Lista de recursos -->
+            <CollectionView x:Name="resourcesCollectionView" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="10"
+                            Margin="5">
+
+                            <Grid ColumnDefinitions="Auto, *">
+
+                                <!-- Información del recurso -->
+                                <StackLayout Grid.Column="1" Padding="10" Spacing="5">
+                                    <Label Text="{Binding Title}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="Black"/>
+
+                                    <Label Text= "{Binding UploadDate}"
+                                       FontSize="14"
+                                       TextColor="Gray"/>
+
+                                    <Button Text="Ver más"
+                                        BackgroundColor="Black"
+                                        TextColor="White"
+                                        HeightRequest="40"
+                                        FontSize="14"
+                                        CornerRadius="15"
+                                        Pressed="OnViewMorePressed"/>
+                                </StackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+    
+</ContentPage>

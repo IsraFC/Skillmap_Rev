@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Pages.MainPage"
+             BackgroundColor="#ECECEC">
+
+    <ScrollView>
+        <StackLayout Padding="20">
+
+            <!-- Encabezado -->
+            <Label Text="Hola, Joaquín" FontSize="24" FontAttributes="Bold" TextColor="Red"/>
+            <Label Text="¿Qué recursos deseas visualizar?" FontSize="14" TextColor="Gray"/>
+
+            <!-- Recomendaciones -->
+            <Label Text="Recomendaciones" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+            <ScrollView Orientation="Horizontal">
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Image Source="tech1.jpeg" WidthRequest="150" HeightRequest="100" Aspect="AspectFill"/>
+                    <Image Source="tech2.png" WidthRequest="150" HeightRequest="100" Aspect="AspectFill"/>
+                </StackLayout>
+            </ScrollView>
+
+            <!-- Sección de Semestres -->
+            <Border BackgroundColor="Red" StrokeShape="RoundRectangle 20" Padding="15" Margin="10,20,10,0">
+                <StackLayout Spacing="10">
+
+                    <Label Text="Todos Mis Semestres" FontSize="18" FontAttributes="Bold" TextColor="White"/>
+
+                    <CollectionView x:Name="semestersCollectionView" SelectionMode="Single"
+                                    SelectionChanged="OnSemesterSelected">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Padding="10" Margin="5">
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <StackLayout Grid.Column="0">
+                                            <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                                            <Label Text="{Binding SubjectCountText}" FontSize="14" TextColor="Gray"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Mostrar todas"
+                            BackgroundColor="White"
+                            TextColor="Red"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="40"
+                            Clicked="OnShowAllSemestersClicked"/>
+
+                </StackLayout>
+            </Border>
+
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
