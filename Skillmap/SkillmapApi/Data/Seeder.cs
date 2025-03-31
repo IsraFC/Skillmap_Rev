@@ -16,20 +16,20 @@ namespace SkillmapApi.Data
             {
                 await AddUserAsync(userManager, dataContext);
             }
-            //if (dataContext.ResourcesItems.Any()) 
-            //{
-            //    await AddResourcesAsync(dataContext);
-            //}
+            if (dataContext.Resources.Any()) 
+            {
+                await AddResourcesAsync(dataContext);
+            }
         }
 
-        //private static async Task AddResourcesAsync(DataContext dataContext)
-        //{
-        //    ResourcesItem item = new ResourcesItem
-        //    {
-        //        Title = "Item1",
-        //        Description = "Descrpcion item 1",
-        //    };
-        //}
+        private static async Task AddResourcesAsync(DataContext dataContext)
+        {
+            ResourcesItem item = new ResourcesItem
+            {
+                Title = "Item1",
+                Description = "Descrpcion item 1",
+            };
+        }
 
         private static async Task AddUserAsync(UserManager<IdentityUser> userManager, DataContext dataContext)
         {

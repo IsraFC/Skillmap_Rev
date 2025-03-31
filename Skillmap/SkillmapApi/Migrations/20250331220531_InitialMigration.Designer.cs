@@ -11,7 +11,7 @@ using SkillmapApi.Data;
 namespace SkillmapApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250328214545_InitialMigration")]
+    [Migration("20250331220531_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -146,6 +146,35 @@ namespace SkillmapApi.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("SkillmapLib1.Models.ResourcesItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("UploadDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Resources");
                 });
 
             modelBuilder.Entity("SkillmapLib1.Models.Role", b =>

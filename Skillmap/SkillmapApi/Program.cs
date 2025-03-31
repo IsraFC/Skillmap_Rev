@@ -11,10 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<User>().AddRoles<IdentityRole>().AddEntityFrameworkStores<DataContext>();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<DataContext>();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("Version 1", new OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Skillmap Api",
         Description = "Skillmap Api",
@@ -25,6 +25,16 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Name = "Authorizarion",
         Type = SecuritySchemeType.ApiKey,
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {{
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme, Id = "oauth2"
+            }
+        }, Array.Empty<string>() }
     });
 });
 
@@ -56,6 +66,7 @@ using (var scoped = app.Services.CreateScope())
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var dataContext = serviceProvider.GetRequiredService<DataContext>();
+    await Seeder.Seed(roleManager, userManager, dataContext);
 }
 
 app.Run();

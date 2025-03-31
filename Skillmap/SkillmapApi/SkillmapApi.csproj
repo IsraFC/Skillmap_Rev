@@ -22,8 +22,4 @@
     <ProjectReference Include="..\SkillmapLib1\SkillmapLib1.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

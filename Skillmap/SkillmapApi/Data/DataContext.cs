@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Options;
 using SkillmapLib1.Models;
 
@@ -14,5 +15,6 @@ namespace SkillmapApi.Data
         }
 
         public DbSet<Role> Roles {  get; set; }
+        public DbSet<ResourcesItem> Resources { get; set; }
     }
 }
