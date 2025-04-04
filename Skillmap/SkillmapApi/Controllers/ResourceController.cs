@@ -1,4 +1,5 @@
 ﻿using System.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillmapApi.Data;
@@ -8,6 +9,7 @@ using SkillmapLib1.Models;
 
 namespace SkillmapApi.Controllers
 {
+    [Authorize (Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class ResourceController : ControllerBase
@@ -60,21 +62,16 @@ namespace SkillmapApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ResourcesItem>> Put(int id, [FromBody] ResourcesItem resources)
         {
-            var result = await _dataContext.Resources.FindAsync(id);
-            if (result == null)
-            {
-                return BadRequest();
-            }
             try
             {
-                _dataContext.Resources.Update(result);
+                _dataContext.Entry(resources).State = EntityState.Modified;
                 await _dataContext.SaveChangesAsync();
-                return Ok(result);
             }
-            catch (Exception e) 
+            catch (Exception ex) 
             {
-                return BadRequest(e);
+                return NotFound(ex.Message);
             }
+            return Ok(resources);
         }
 
         // DELETE api/<ResourceController>/5
