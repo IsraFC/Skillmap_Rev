@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SkillmapApi.Data;
 using SkillmapLib1.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<DataContext>();
+builder.Services.AddIdentity<User, Role>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders(); 
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -20,11 +26,14 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Skillmap Api",
         Version = "v1",
     });
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Name = "Authorizarion",
-        Type = SecuritySchemeType.ApiKey,
+        Description = "Ingresa el token JWT con el formato: Bearer {token}"
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {{
@@ -32,7 +41,8 @@ builder.Services.AddSwaggerGen(options =>
         {
             Reference = new OpenApiReference
             {
-                Type = ReferenceType.SecurityScheme, Id = "oauth2"
+                Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
             }
         }, Array.Empty<string>() }
     });
@@ -53,9 +63,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapIdentityApi<User>();
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -63,8 +73,8 @@ app.MapControllers();
 using (var scoped = app.Services.CreateScope())
 {
     var serviceProvider = scoped.ServiceProvider;
-    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
     var dataContext = serviceProvider.GetRequiredService<DataContext>();
     await Seeder.Seed(roleManager, userManager, dataContext);
 }

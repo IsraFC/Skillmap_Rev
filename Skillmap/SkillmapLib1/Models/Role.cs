@@ -4,17 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace SkillmapLib1.Models
 {
-    public class Role
+    public class Role : IdentityRole<int>
     {
-        [Key]
-        public int ID_Role { get; set; }
+        [Required, MaxLength(50)]
+        public string Role_Name { get; set; } = string.Empty;
 
-        [Required]
-        public string? Role_Name { get; set; }
-
-        public ICollection<Role>? Roles { get; set; }
+        // Relación: un rol tiene muchos usuarios
+        public ICollection<User>? Usuarios { get; set; }
     }
 }

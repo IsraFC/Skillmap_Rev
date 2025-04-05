@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SkillmapApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,9 @@ namespace SkillmapApi.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Role_Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true)
@@ -26,38 +28,15 @@ namespace SkillmapApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resources",
+                name: "ResourceTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    Link = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
-                    UploadDate = table.Column<DateOnly>(type: "TEXT", nullable: false)
+                    Id_Tipo_Recurso = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resources", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
-                {
-                    ID_Role = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Role_Name = table.Column<string>(type: "TEXT", nullable: false),
-                    RoleID_Role = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.ID_Role);
-                    table.ForeignKey(
-                        name: "FK_Roles_Roles_RoleID_Role",
-                        column: x => x.RoleID_Role,
-                        principalTable: "Roles",
-                        principalColumn: "ID_Role");
+                    table.PrimaryKey("PK_ResourceTypes", x => x.Id_Tipo_Recurso);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,7 +45,7 @@ namespace SkillmapApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleId = table.Column<int>(type: "INTEGER", nullable: false),
                     ClaimType = table.Column<string>(type: "TEXT", nullable: true),
                     ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -85,15 +64,15 @@ namespace SkillmapApi.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false),
-                    Password = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Ap = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Am = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    RoleID_Role = table.Column<int>(type: "INTEGER", nullable: true),
+                    Apellido_P = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Apellido_M = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    ID_Rol = table.Column<int>(type: "INTEGER", nullable: false),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
@@ -110,10 +89,34 @@ namespace SkillmapApi.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Roles_RoleID_Role",
-                        column: x => x.RoleID_Role,
-                        principalTable: "Roles",
-                        principalColumn: "ID_Role");
+                        name: "FK_AspNetUsers_AspNetRoles_ID_Rol",
+                        column: x => x.ID_Rol,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResourcesItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    Link = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    UploadDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ResourceTypeId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResourcesItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ResourcesItems_ResourceTypes_ResourceTypeId",
+                        column: x => x.ResourceTypeId,
+                        principalTable: "ResourceTypes",
+                        principalColumn: "Id_Tipo_Recurso",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -122,7 +125,7 @@ namespace SkillmapApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     ClaimType = table.Column<string>(type: "TEXT", nullable: true),
                     ClaimValue = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -144,7 +147,7 @@ namespace SkillmapApi.Migrations
                     LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
                     ProviderKey = table.Column<string>(type: "TEXT", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,8 +164,8 @@ namespace SkillmapApi.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
-                    RoleId = table.Column<string>(type: "TEXT", nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RoleId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -185,7 +188,7 @@ namespace SkillmapApi.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "TEXT", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     LoginProvider = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Value = table.Column<string>(type: "TEXT", nullable: true)
@@ -198,6 +201,76 @@ namespace SkillmapApi.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subjects",
+                columns: table => new
+                {
+                    ID_Materia = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Semester = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
+                    ID_Docente = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subjects", x => x.ID_Materia);
+                    table.ForeignKey(
+                        name: "FK_Subjects_AspNetUsers_ID_Docente",
+                        column: x => x.ID_Docente,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ResourceFeedbacks",
+                columns: table => new
+                {
+                    ID_Recurso = table.Column<int>(type: "INTEGER", nullable: false),
+                    ID_Usuario = table.Column<int>(type: "INTEGER", nullable: false),
+                    Feedback = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ResourceFeedbacks", x => new { x.ID_Recurso, x.ID_Usuario });
+                    table.ForeignKey(
+                        name: "FK_ResourceFeedbacks_AspNetUsers_ID_Usuario",
+                        column: x => x.ID_Usuario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ResourceFeedbacks_ResourcesItems_ID_Recurso",
+                        column: x => x.ID_Recurso,
+                        principalTable: "ResourcesItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubjectResources",
+                columns: table => new
+                {
+                    ID_Materia = table.Column<int>(type: "INTEGER", nullable: false),
+                    ID_Recurso = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubjectResources", x => new { x.ID_Materia, x.ID_Recurso });
+                    table.ForeignKey(
+                        name: "FK_SubjectResources_ResourcesItems_ID_Recurso",
+                        column: x => x.ID_Recurso,
+                        principalTable: "ResourcesItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubjectResources_Subjects_ID_Materia",
+                        column: x => x.ID_Materia,
+                        principalTable: "Subjects",
+                        principalColumn: "ID_Materia",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -233,9 +306,9 @@ namespace SkillmapApi.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_RoleID_Role",
+                name: "IX_AspNetUsers_ID_Rol",
                 table: "AspNetUsers",
-                column: "RoleID_Role");
+                column: "ID_Rol");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -244,9 +317,24 @@ namespace SkillmapApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_RoleID_Role",
-                table: "Roles",
-                column: "RoleID_Role");
+                name: "IX_ResourceFeedbacks_ID_Usuario",
+                table: "ResourceFeedbacks",
+                column: "ID_Usuario");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResourcesItems_ResourceTypeId",
+                table: "ResourcesItems",
+                column: "ResourceTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubjectResources_ID_Recurso",
+                table: "SubjectResources",
+                column: "ID_Recurso");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Subjects_ID_Docente",
+                table: "Subjects",
+                column: "ID_Docente");
         }
 
         /// <inheritdoc />
@@ -268,16 +356,25 @@ namespace SkillmapApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Resources");
+                name: "ResourceFeedbacks");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "SubjectResources");
+
+            migrationBuilder.DropTable(
+                name: "ResourcesItems");
+
+            migrationBuilder.DropTable(
+                name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "ResourceTypes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "AspNetRoles");
         }
     }
 }

@@ -23,14 +23,14 @@ namespace SkillmapApi.Controllers
         [HttpGet]
         public async Task<List<ResourcesItem>> Get()
         {
-            return await _dataContext.Resources.ToListAsync();
+            return await _dataContext.ResourcesItems.ToListAsync();
         }
 
         // GET api/<ResourceController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ResourcesItem>> Get(int id)
         {
-            var result = await _dataContext.Resources.FindAsync(id);
+            var result = await _dataContext.ResourcesItems.FindAsync(id);
             if (result == null)
             {
                 return BadRequest();
@@ -48,7 +48,7 @@ namespace SkillmapApi.Controllers
             }
             try
             {
-                await _dataContext.Resources.AddAsync(resources);
+                await _dataContext.ResourcesItems.AddAsync(resources);
                 await _dataContext.SaveChangesAsync();
                 return Ok(resources);
             }
@@ -78,14 +78,14 @@ namespace SkillmapApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResourcesItem>> Delete(int id)
         {
-            var result = await _dataContext.Resources.FindAsync(id);
+            var result = await _dataContext.ResourcesItems.FindAsync(id);
             if (result == null)
             {
                 return BadRequest();
             }
             try
             {
-                _dataContext.Resources.Remove(result);
+                _dataContext.ResourcesItems.Remove(result);
                 await _dataContext.SaveChangesAsync();
                 return Ok(result);
             }

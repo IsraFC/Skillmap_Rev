@@ -1,30 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace SkillmapLib1.Models
 {
     // All the code in this file is included in all platforms.
-    public class User : IdentityUser
+    public class User : IdentityUser<int>
     {
-        [MaxLength(100)]
-        [Required]
-        public override string? Email { get; set; }
+        [Required, MaxLength(50)]
+        public string Name { get; set; } = string.Empty;
 
-        [MaxLength(20)]
-        [Required]
-        public string? Password { get; set; }
+        [Required, MaxLength(50)]
+        public string Apellido_P { get; set; } = string.Empty;
 
-        [MaxLength(50)]
-        [Required]
-        public string? Name { get; set; }
+        [Required, MaxLength(50)]
+        public string Apellido_M { get; set; } = string.Empty;
 
-        [MaxLength(50)]
-        [Required]
-        public string? Ap { get; set; }
-
-        [MaxLength(50)]
-        [Required]
-        public string? Am { get; set; }
+        [ForeignKey("Role")]
+        public int ID_Rol { get; set; }
 
         public Role? Role { get; set; }
     }
