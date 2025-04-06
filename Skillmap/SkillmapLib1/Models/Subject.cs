@@ -23,9 +23,8 @@ namespace SkillmapLib1.Models
         public string Semester { get; set; } = string.Empty;
 
         // Clave foránea al docente (usuario)
-        [ForeignKey("Teacher")]
         public int ID_Docente { get; set; }
 
-        public User Teacher { get; set; } = null!;
+        public User? Teacher { get; set; }
     }
 }

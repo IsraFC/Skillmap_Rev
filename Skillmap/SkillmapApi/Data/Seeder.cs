@@ -7,15 +7,15 @@ namespace SkillmapApi.Data
 {
     public class Seeder
     {
-        public static async Task Seed(RoleManager<Role> roleManager, UserManager<User> userManager, DataContext dataContext)
+        public static async Task Seed(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, DataContext dataContext)
         {
             if (!dataContext.Roles.Any())
             {
-                await AddRoleAsync(roleManager, dataContext);
+                await AddRoleAsync(roleManager);
             }
             if (!dataContext.Users.Any())
             {
-                await AddUserAsync(userManager, dataContext);
+                await AddUserAsync(userManager);
             }
             if (!dataContext.ResourcesItems.Any())
             {
@@ -29,7 +29,7 @@ namespace SkillmapApi.Data
             var resourceType = await dataContext.ResourceTypes.FirstOrDefaultAsync();
             if (resourceType == null)
             {
-                resourceType = new ResourceType();
+                resourceType = new ResourceType() { Id_Tipo_Recurso = "PDF"};
                 await dataContext.ResourceTypes.AddAsync(resourceType);
                 await dataContext.SaveChangesAsync();
             }
@@ -47,18 +47,18 @@ namespace SkillmapApi.Data
             await dataContext.SaveChangesAsync();
         }
 
-        private static async Task AddUserAsync(UserManager<User> userManager, DataContext dataContext)
+        private static async Task AddUserAsync(UserManager<User> userManager )
         {
             var user = new User
             {
                 Name = "Admin",
-                Apellido_P = "1",
-                Apellido_M = "2",
+                Father_LastName = "1",
+                Mother_LastName = "2",
                 Email = "admin@mail.com",
                 UserName = "admin@mail.com"
             };
 
-            var result = await userManager.CreateAsync(user, "123456");
+            var result = await userManager.CreateAsync(user, "Az1234#");
 
             if (result.Succeeded)
             {
@@ -75,11 +75,11 @@ namespace SkillmapApi.Data
             }
         }
 
-        private static async Task AddRoleAsync(RoleManager<Role> roleManager, DataContext dataContext)
+        private static async Task AddRoleAsync(RoleManager<IdentityRole> roleManager)
         {
             if(!await roleManager.RoleExistsAsync("Admin"))
             {
-                await roleManager.CreateAsync(new Role { Name = "Admin", Role_Name = "Admin" });
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
             }
         }
     }

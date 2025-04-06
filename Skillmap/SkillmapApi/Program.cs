@@ -14,9 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-builder.Services.AddIdentity<User, Role>()
-    .AddEntityFrameworkStores<DataContext>()
-    .AddDefaultTokenProviders(); 
+builder.Services.AddIdentityApiEndpoints<User>(options =>
+{
+    options.Password.RequiredLength = 4;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireDigit = true;
+}).AddRoles<IdentityRole>().AddEntityFrameworkStores<DataContext>(); 
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -26,14 +29,11 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Skillmap Api",
         Version = "v1",
     });
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Ingresa el token JWT con el formato: Bearer {token}"
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header
     });
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {{
@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(options =>
             Reference = new OpenApiReference
             {
                 Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = "oauth2"
             }
         }, Array.Empty<string>() }
     });
@@ -60,8 +60,13 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Skillmap Api");
+    });
 }
+
+app.MapIdentityApi<User>();
 
 app.UseHttpsRedirection();
 
@@ -73,7 +78,7 @@ app.MapControllers();
 using (var scoped = app.Services.CreateScope())
 {
     var serviceProvider = scoped.ServiceProvider;
-    var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
     var dataContext = serviceProvider.GetRequiredService<DataContext>();
     await Seeder.Seed(roleManager, userManager, dataContext);

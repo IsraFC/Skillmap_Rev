@@ -5,20 +5,15 @@ using Microsoft.AspNetCore.Identity;
 namespace SkillmapLib1.Models
 {
     // All the code in this file is included in all platforms.
-    public class User : IdentityUser<int>
+    public class User : IdentityUser
     {
         [Required, MaxLength(50)]
         public string Name { get; set; } = string.Empty;
 
         [Required, MaxLength(50)]
-        public string Apellido_P { get; set; } = string.Empty;
+        public string Father_LastName { get; set; } = string.Empty;
 
         [Required, MaxLength(50)]
-        public string Apellido_M { get; set; } = string.Empty;
-
-        [ForeignKey("Role")]
-        public int ID_Rol { get; set; }
-
-        public Role? Role { get; set; }
+        public string Mother_LastName { get; set; } = string.Empty;
     }
 }

@@ -7,17 +7,13 @@ using SkillmapLib1.Models;
 
 namespace SkillmapApi.Data
 {
-    public class DataContext : IdentityDbContext<User, Role, int>
+    public class DataContext : IdentityDbContext<User>
     {
         public DataContext(DbContextOptions<DataContext> options)
             : base(options) 
         {
             
         }
-
-        // Usuarios y roles
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
 
         // Recursos y tipos
         public DbSet<ResourcesItem> ResourcesItems { get; set; }
@@ -37,9 +33,6 @@ namespace SkillmapApi.Data
 
             modelBuilder.Entity<SubjectResource>()
                 .HasKey(sr => new { sr.ID_Materia, sr.ID_Recurso });
-
-            modelBuilder.Entity<ResourceFeedback>()
-                .HasKey(rf => new { rf.ID_Recurso, rf.ID_Usuario });
         }
     }
 }
