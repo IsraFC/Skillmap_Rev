@@ -34,7 +34,7 @@ namespace SkillmapApi.Controllers
             var result = await _dataContext.SubjectResources
                 .Include(sr => sr.Subject)
                 .Include(sr => sr.ResourceItem)
-                .FirstOrDefaultAsync(sr => sr.ID_Materia == idMateria && sr.ID_Recurso == idRecurso);
+                .FirstOrDefaultAsync(sr => sr.ID_Subject == idMateria && sr.ID_Resource == idRecurso);
 
             if (result == null)
                 return NotFound();
@@ -45,9 +45,6 @@ namespace SkillmapApi.Controllers
         [HttpPost]
         public async Task<ActionResult<SubjectResource>> Post([FromBody] SubjectResource subjectResource)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(subjectResource);
-
             try
             {
                 await _dataContext.SubjectResources.AddAsync(subjectResource);
@@ -56,7 +53,7 @@ namespace SkillmapApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest($"Error al agregar la relación: {ex.Message}");
             }
         }
 
@@ -64,7 +61,7 @@ namespace SkillmapApi.Controllers
         public async Task<ActionResult<SubjectResource>> Delete(int idMateria, int idRecurso)
         {
             var result = await _dataContext.SubjectResources
-                .FirstOrDefaultAsync(sr => sr.ID_Materia == idMateria && sr.ID_Recurso == idRecurso);
+                .FirstOrDefaultAsync(sr => sr.ID_Subject == idMateria && sr.ID_Resource == idRecurso);
 
             if (result == null)
                 return NotFound();
@@ -77,7 +74,7 @@ namespace SkillmapApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest($"Error al eliminar la relación: {ex.Message}");
             }
         }
     }

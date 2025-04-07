@@ -32,7 +32,7 @@ namespace SkillmapApi.Controllers
         {
             var result = await _dataContext.Subjects
                 .Include(s => s.Teacher)
-                .FirstOrDefaultAsync(s => s.ID_Materia == id);
+                .FirstOrDefaultAsync(s => s.ID_Subject == id);
 
             if (result == null)
                 return NotFound();
@@ -41,30 +41,40 @@ namespace SkillmapApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Subject>> Post([FromBody] Subject subject)
+        public async Task<ActionResult<Subject>> Post([FromBody] SubjectInput data)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(subject);
+            var teacher = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == data.teacherUserName);
+            if (teacher == null)
+                return BadRequest("Docente no encontrado");
 
-            try
+            var subject = new Subject
             {
-                await _dataContext.Subjects.AddAsync(subject);
-                await _dataContext.SaveChangesAsync();
-                return Ok(subject);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+                Name = data.name,
+                Semester = data.semester,
+                ID_Teacher = teacher.Id
+            };
+
+            await _dataContext.Subjects.AddAsync(subject);
+            await _dataContext.SaveChangesAsync();
+
+            return Ok(subject);
         }
+
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Subject>> Put(int id, [FromBody] Subject subject)
+        public async Task<ActionResult<Subject>> Put(int id, [FromBody] SubjectInput data)
         {
-            if (id != subject.ID_Materia)
-                return BadRequest("ID mismatch.");
+            var teacher = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == data.teacherUserName);
+            if (teacher == null)
+                return BadRequest("Docente no encontrado");
 
-            _dataContext.Entry(subject).State = EntityState.Modified;
+            var subject = await _dataContext.Subjects.FindAsync(id);
+            if (subject == null)
+                return NotFound();
+
+            subject.Name = data.name;
+            subject.Semester = data.semester;
+            subject.ID_Teacher = teacher.Id;
 
             try
             {
@@ -73,9 +83,10 @@ namespace SkillmapApi.Controllers
             }
             catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest($"Error al actualizar la materia: {ex.Message}");
             }
         }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<Subject>> Delete(int id)
@@ -96,5 +107,12 @@ namespace SkillmapApi.Controllers
                 return BadRequest(ex);
             }
         }
+    }
+
+    public class SubjectInput
+    {
+        public string name { get; set; } = string.Empty;
+        public string semester { get; set; } = string.Empty;
+        public string teacherUserName { get; set; } = string.Empty;
     }
 }

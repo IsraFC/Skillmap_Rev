@@ -17,7 +17,33 @@ namespace SkillmapApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -29,8 +55,9 @@ namespace SkillmapApi.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -39,7 +66,7 @@ namespace SkillmapApi.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,8 +78,9 @@ namespace SkillmapApi.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -61,7 +89,7 @@ namespace SkillmapApi.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("TEXT");
@@ -72,8 +100,9 @@ namespace SkillmapApi.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -82,13 +111,13 @@ namespace SkillmapApi.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -97,10 +126,10 @@ namespace SkillmapApi.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("TEXT");
@@ -118,31 +147,28 @@ namespace SkillmapApi.Migrations
 
             modelBuilder.Entity("SkillmapLib1.Models.ResourceFeedback", b =>
                 {
-                    b.Property<int>("ID_Recurso")
+                    b.Property<int>("ID_Resource")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ID_Usuario")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ID_User")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Feedback")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ID_Recurso", "ID_Usuario");
-
-                    b.HasIndex("ID_Usuario");
+                    b.HasKey("ID_Resource", "ID_User");
 
                     b.ToTable("ResourceFeedbacks");
                 });
 
             modelBuilder.Entity("SkillmapLib1.Models.ResourceType", b =>
                 {
-                    b.Property<int>("Id_Tipo_Recurso")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id_Resource_Type")
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("Id_Tipo_Recurso");
+                    b.HasKey("Id_Resource_Type");
 
                     b.ToTable("ResourceTypes");
                 });
@@ -163,8 +189,9 @@ namespace SkillmapApi.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ResourceTypeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ResourceTypeId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -176,51 +203,18 @@ namespace SkillmapApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ResourceTypeId");
-
                     b.ToTable("ResourcesItems");
-                });
-
-            modelBuilder.Entity("SkillmapLib1.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Role_Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("SkillmapLib1.Models.Subject", b =>
                 {
-                    b.Property<int>("ID_Materia")
+                    b.Property<int>("ID_Subject")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ID_Docente")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ID_Teacher")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -232,46 +226,38 @@ namespace SkillmapApi.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ID_Materia");
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("TEXT");
 
-                    b.HasIndex("ID_Docente");
+                    b.HasKey("ID_Subject");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("SkillmapLib1.Models.SubjectResource", b =>
                 {
-                    b.Property<int>("ID_Materia")
+                    b.Property<int>("ID_Subject")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ID_Recurso")
+                    b.Property<int>("ID_Resource")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ID_Materia", "ID_Recurso");
+                    b.HasKey("ID_Subject", "ID_Resource");
 
-                    b.HasIndex("ID_Recurso");
+                    b.HasIndex("ID_Resource");
 
                     b.ToTable("SubjectResources");
                 });
 
             modelBuilder.Entity("SkillmapLib1.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Apellido_M")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Apellido_P")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -284,13 +270,20 @@ namespace SkillmapApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ID_Rol")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Father_LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Mother_LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -327,8 +320,6 @@ namespace SkillmapApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ID_Rol");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -339,16 +330,16 @@ namespace SkillmapApi.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("SkillmapLib1.Models.Role", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("SkillmapLib1.Models.User", null)
                         .WithMany()
@@ -357,7 +348,7 @@ namespace SkillmapApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("SkillmapLib1.Models.User", null)
                         .WithMany()
@@ -366,9 +357,9 @@ namespace SkillmapApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("SkillmapLib1.Models.Role", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -381,94 +372,41 @@ namespace SkillmapApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("SkillmapLib1.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SkillmapLib1.Models.ResourceFeedback", b =>
-                {
-                    b.HasOne("SkillmapLib1.Models.ResourcesItem", "ResourceItem")
-                        .WithMany()
-                        .HasForeignKey("ID_Recurso")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SkillmapLib1.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("ID_Usuario")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ResourceItem");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SkillmapLib1.Models.ResourcesItem", b =>
-                {
-                    b.HasOne("SkillmapLib1.Models.ResourceType", "ResourceType")
-                        .WithMany("ResourcesItems")
-                        .HasForeignKey("ResourceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ResourceType");
                 });
 
             modelBuilder.Entity("SkillmapLib1.Models.Subject", b =>
                 {
                     b.HasOne("SkillmapLib1.Models.User", "Teacher")
                         .WithMany()
-                        .HasForeignKey("ID_Docente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeacherId");
 
                     b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SkillmapLib1.Models.SubjectResource", b =>
                 {
-                    b.HasOne("SkillmapLib1.Models.Subject", "Subject")
+                    b.HasOne("SkillmapLib1.Models.ResourcesItem", "ResourceItem")
                         .WithMany()
-                        .HasForeignKey("ID_Materia")
+                        .HasForeignKey("ID_Resource")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SkillmapLib1.Models.ResourcesItem", "ResourceItem")
+                    b.HasOne("SkillmapLib1.Models.Subject", "Subject")
                         .WithMany()
-                        .HasForeignKey("ID_Recurso")
+                        .HasForeignKey("ID_Subject")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ResourceItem");
 
                     b.Navigation("Subject");
-                });
-
-            modelBuilder.Entity("SkillmapLib1.Models.User", b =>
-                {
-                    b.HasOne("SkillmapLib1.Models.Role", "Role")
-                        .WithMany("Usuarios")
-                        .HasForeignKey("ID_Rol")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("SkillmapLib1.Models.ResourceType", b =>
-                {
-                    b.Navigation("ResourcesItems");
-                });
-
-            modelBuilder.Entity("SkillmapLib1.Models.Role", b =>
-                {
-                    b.Navigation("Usuarios");
                 });
 #pragma warning restore 612, 618
         }

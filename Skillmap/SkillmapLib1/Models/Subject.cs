@@ -12,7 +12,7 @@ namespace SkillmapLib1.Models
     {
         // Clave primaria de la materia
         [Key]
-        public int ID_Materia { get; set; }
+        public int ID_Subject { get; set; }
 
         // Nombre de la materia
         [Required, MaxLength(100)]
@@ -23,7 +23,7 @@ namespace SkillmapLib1.Models
         public string Semester { get; set; } = string.Empty;
 
         // Clave foránea al docente (usuario)
-        public int ID_Docente { get; set; }
+        public string ID_Teacher { get; set; } = string.Empty;
 
         public User? Teacher { get; set; }
     }

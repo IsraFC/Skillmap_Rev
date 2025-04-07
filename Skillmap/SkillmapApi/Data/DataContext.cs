@@ -32,7 +32,10 @@ namespace SkillmapApi.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<SubjectResource>()
-                .HasKey(sr => new { sr.ID_Materia, sr.ID_Recurso });
+                .HasKey(sr => new { sr.ID_Subject, sr.ID_Resource });
+
+            modelBuilder.Entity<ResourceFeedback>()
+                .HasKey(rf => new { rf.ID_Resource, rf.ID_User });
         }
     }
 }

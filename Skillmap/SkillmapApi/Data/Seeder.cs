@@ -21,6 +21,18 @@ namespace SkillmapApi.Data
             {
                 await AddResourcesAsync(dataContext);
             }
+            if (!dataContext.Subjects.Any())
+            {
+                await AddSubjectsAsync(dataContext);
+            }
+            if (!dataContext.SubjectResources.Any())
+            {
+                await AddSubjectResourcesAsync(dataContext);
+            }
+            if (!dataContext.ResourceFeedbacks.Any())
+            {
+                await AddResourceFeedbackAsync(dataContext);
+            }
         }
 
         private static async Task AddResourcesAsync(DataContext dataContext)
@@ -29,7 +41,7 @@ namespace SkillmapApi.Data
             var resourceType = await dataContext.ResourceTypes.FirstOrDefaultAsync();
             if (resourceType == null)
             {
-                resourceType = new ResourceType() { Id_Tipo_Recurso = "PDF"};
+                resourceType = new ResourceType() { Id_Resource_Type = "PDF"};
                 await dataContext.ResourceTypes.AddAsync(resourceType);
                 await dataContext.SaveChangesAsync();
             }
@@ -40,7 +52,7 @@ namespace SkillmapApi.Data
                 Description = "Descripción item 1",
                 Link = "https://ejemplo.com",
                 UploadDate = DateTime.Now,
-                ResourceTypeId = resourceType.Id_Tipo_Recurso
+                ResourceTypeId = resourceType.Id_Resource_Type
             };
 
             await dataContext.ResourcesItems.AddAsync(item);
@@ -80,6 +92,76 @@ namespace SkillmapApi.Data
             if(!await roleManager.RoleExistsAsync("Admin"))
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+        }
+
+        private static async Task AddSubjectsAsync(DataContext dataContext)
+        {
+            var teacher = await dataContext.Users.FirstOrDefaultAsync();
+            if (teacher != null)
+            {
+                var subject = new Subject
+                {
+                    Name = "Programación I",
+                    Semester = "1° Semestre",
+                    ID_Teacher = teacher.Id,
+                };
+
+                await dataContext.Subjects.AddAsync(subject);
+                await dataContext.SaveChangesAsync();
+            }
+        }
+
+        private static async Task AddSubjectResourcesAsync(DataContext dataContext)
+        {
+            if (await dataContext.SubjectResources.AnyAsync())
+                return;
+
+            var subject = await dataContext.Subjects.FirstOrDefaultAsync();
+            var resource = await dataContext.ResourcesItems.FirstOrDefaultAsync();
+
+            if (subject != null && resource != null)
+            {
+                var subjectResource = new SubjectResource
+                {
+                    ID_Subject = subject.ID_Subject,
+                    ID_Resource = resource.Id
+                };
+
+                await dataContext.SubjectResources.AddAsync(subjectResource);
+                await dataContext.SaveChangesAsync();
+                Console.WriteLine("✅ SubjectResource agregado.");
+            }
+            else
+            {
+                Console.WriteLine("❌ No se encontró una materia o recurso para asociar.");
+            }
+        }
+
+        private static async Task AddResourceFeedbackAsync(DataContext dataContext)
+        {
+            if (await dataContext.ResourceFeedbacks.AnyAsync())
+                return;
+
+            var user = await dataContext.Users.FirstOrDefaultAsync();
+            var resource = await dataContext.ResourcesItems.FirstOrDefaultAsync();
+
+            if (user != null && resource != null)
+            {
+                var feedback = new ResourceFeedback
+                {
+                    ID_User = user.Id, 
+                    ID_Resource = resource.Id,
+                    Feedback = "Este recurso fue muy útil para el examen final."
+                };
+
+                await dataContext.ResourceFeedbacks.AddAsync(feedback);
+                await dataContext.SaveChangesAsync();
+                Console.WriteLine("✅ ResourceFeedback agregado.");
+            }
+            else
+            {
+                Console.WriteLine("❌ No se encontró un usuario o recurso para asociar con feedback.");
             }
         }
     }

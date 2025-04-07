@@ -10,8 +10,6 @@ namespace SkillmapLib1.Models
     public class ResourceType
     {
         [Key]
-        public string Id_Tipo_Recurso { get; set; } = string.Empty;
-
-        public ICollection<ResourcesItem> ResourcesItems { get; set; } = new List<ResourcesItem>();
+        public string Id_Resource_Type { get; set; } = string.Empty;
     }
 }

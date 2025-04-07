@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,70 +24,83 @@ namespace SkillmapApi.Controllers
         public async Task<List<ResourceFeedback>> Get()
         {
             return await _dataContext.ResourceFeedbacks
-                .Include(rf => rf.ResourceItem)
-                .Include(rf => rf.User)
                 .ToListAsync();
         }
 
-        [HttpGet("{idRecurso}/{idUsuario}")]
-        public async Task<ActionResult<ResourceFeedback>> Get(int idRecurso, int idUsuario)
+        [HttpGet("{idRecurso}/{username}")]
+        public async Task<ActionResult<ResourceFeedback>> Get(int idRecurso, string username)
         {
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user == null)
+                return NotFound("Usuario no encontrado");
+
             var result = await _dataContext.ResourceFeedbacks
-                .Include(rf => rf.ResourceItem)
-                .Include(rf => rf.User)
-                .FirstOrDefaultAsync(rf => rf.ID_Recurso == idRecurso && rf.ID_Usuario == idUsuario);
+                .FirstOrDefaultAsync(rf => rf.ID_Resource == idRecurso && rf.ID_User == user.Id);
 
             if (result == null)
-                return NotFound();
+                return NotFound("Feedback no encontrado");
 
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResourceFeedback>> Post([FromBody] ResourceFeedback feedback)
+        public async Task<ActionResult<ResourceFeedback>> Post([FromBody] ResourceFeedbackInput data)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(feedback);
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == data.userName);
+            if (user == null)
+                return BadRequest("Usuario no válido");
+
+            var feedback = new ResourceFeedback
+            {
+                ID_Resource = data.id_Resource,
+                ID_User = user.Id,
+                Feedback = data.feedback
+            };
+
+            _dataContext.ResourceFeedbacks.Add(feedback);
+            await _dataContext.SaveChangesAsync();
+
+            return Ok(feedback);
+        }
+
+        [HttpPut("{idRecurso}/{username}")]
+        public async Task<ActionResult<ResourceFeedback>> Put(int idRecurso, string username, [FromBody] ResourceFeedbackUpdate updatedData)
+        {
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user == null)
+                return NotFound("Usuario no encontrado");
+
+            var feedback = await _dataContext.ResourceFeedbacks
+                .FirstOrDefaultAsync(f => f.ID_Resource == idRecurso && f.ID_User == user.Id);
+
+            if (feedback == null)
+                return NotFound("Feedback no encontrado");
+
+            feedback.Feedback = updatedData.feedback;
 
             try
             {
-                await _dataContext.ResourceFeedbacks.AddAsync(feedback);
                 await _dataContext.SaveChangesAsync();
                 return Ok(feedback);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest($"Error al actualizar: {ex.Message}");
             }
         }
 
-        [HttpPut("{idRecurso}/{idUsuario}")]
-        public async Task<ActionResult<ResourceFeedback>> Put(int idRecurso, int idUsuario, [FromBody] ResourceFeedback feedback)
+        [HttpDelete("{idRecurso}/{username}")]
+        public async Task<ActionResult<ResourceFeedback>> Delete(int idRecurso, string username)
         {
-            if (idRecurso != feedback.ID_Recurso || idUsuario != feedback.ID_Usuario)
-                return BadRequest("IDs don't match.");
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user == null)
+                return NotFound("Usuario no encontrado");
 
-            _dataContext.Entry(feedback).State = EntityState.Modified;
-
-            try
-            {
-                await _dataContext.SaveChangesAsync();
-                return Ok(feedback);
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpDelete("{idRecurso}/{idUsuario}")]
-        public async Task<ActionResult<ResourceFeedback>> Delete(int idRecurso, int idUsuario)
-        {
             var result = await _dataContext.ResourceFeedbacks
-                .FirstOrDefaultAsync(rf => rf.ID_Recurso == idRecurso && rf.ID_Usuario == idUsuario);
+                .FirstOrDefaultAsync(rf => rf.ID_Resource == idRecurso && rf.ID_User == user.Id);
 
             if (result == null)
-                return NotFound();
+                return NotFound("Feedback no encontrado");
 
             try
             {
@@ -96,9 +110,20 @@ namespace SkillmapApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest($"Error al eliminar: {ex.Message}");
             }
         }
     }
 
+    public class ResourceFeedbackInput
+    {
+        public int id_Resource { get; set; }
+        public string userName { get; set; } = string.Empty;
+        public string feedback { get; set; } = string.Empty;
+    }
+
+    public class ResourceFeedbackUpdate
+    {
+        public string feedback { get; set; } = string.Empty;
+    }
 }

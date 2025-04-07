@@ -26,7 +26,7 @@ namespace SkillmapApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ResourceType>> Get(int id)
+        public async Task<ActionResult<ResourceType>> Get(string id)
         {
             var result = await _context.ResourceTypes.FindAsync(id);
             if (result == null)
@@ -47,23 +47,8 @@ namespace SkillmapApi.Controllers
             return Ok(type);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ResourceType>> Put(int id, [FromBody] ResourceType type)
-        {
-            try
-            {
-                _context.Entry(type).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return Ok(type);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ResourceType>> Delete(int id)
+        public async Task<ActionResult<ResourceType>> Delete(string id)
         {
             var result = await _context.ResourceTypes.FindAsync(id);
             if (result == null)
