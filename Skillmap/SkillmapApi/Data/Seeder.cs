@@ -48,9 +48,9 @@ namespace SkillmapApi.Data
 
             var item = new ResourcesItem
             {
-                Title = "Item1",
-                Description = "Descripción item 1",
-                Link = "https://ejemplo.com",
+                Title = ".NET MAUI",
+                Description = "Programacion en .NET MAUI para aplicaciones moviles",
+                Link = "https://Microsoft.com",
                 UploadDate = DateTime.Now,
                 ResourceTypeId = resourceType.Id_Resource_Type
             };
@@ -75,12 +75,33 @@ namespace SkillmapApi.Data
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, "Admin");
-                Console.WriteLine("✅ Usuario creado exitosamente.");
             }
             else
             {
-                Console.WriteLine("❌ Error al crear el usuario:");
                 foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"- {error.Description}");
+                }
+            }
+
+            var user2 = new User
+            {
+                Name = "Teacher",
+                Father_LastName = "1",
+                Mother_LastName = "2",
+                Email = "teacher@mail.com",
+                UserName = "teacher@mail.com"
+            };
+
+            var result2 = await userManager.CreateAsync(user2, "Az5678#");
+
+            if (result2.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user2, "Teacher");
+            }
+            else
+            {
+                foreach (var error in result2.Errors)
                 {
                     Console.WriteLine($"- {error.Description}");
                 }
@@ -93,6 +114,11 @@ namespace SkillmapApi.Data
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
             }
+
+            if (!await roleManager.RoleExistsAsync("Teacher"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Teacher"));
+            }
         }
 
         private static async Task AddSubjectsAsync(DataContext dataContext)
@@ -102,8 +128,8 @@ namespace SkillmapApi.Data
             {
                 var subject = new Subject
                 {
-                    Name = "Programación I",
-                    Semester = "1° Semestre",
+                    Name = "Aplicaciones Moviles I",
+                    Semester = "6° Semestre",
                     ID_Teacher = teacher.Id,
                 };
 
@@ -130,11 +156,10 @@ namespace SkillmapApi.Data
 
                 await dataContext.SubjectResources.AddAsync(subjectResource);
                 await dataContext.SaveChangesAsync();
-                Console.WriteLine("✅ SubjectResource agregado.");
             }
             else
             {
-                Console.WriteLine("❌ No se encontró una materia o recurso para asociar.");
+                Console.WriteLine("No se encontró una materia o recurso para asociar.");
             }
         }
 
@@ -157,11 +182,10 @@ namespace SkillmapApi.Data
 
                 await dataContext.ResourceFeedbacks.AddAsync(feedback);
                 await dataContext.SaveChangesAsync();
-                Console.WriteLine("✅ ResourceFeedback agregado.");
             }
             else
             {
-                Console.WriteLine("❌ No se encontró un usuario o recurso para asociar con feedback.");
+                Console.WriteLine("No se encontró un usuario o recurso para asociar con feedback.");
             }
         }
     }
