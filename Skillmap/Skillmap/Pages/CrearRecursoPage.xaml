@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Pages.CrearRecursoPage"
+             BackgroundColor="#f8f9fa"
+             Title="Nuevo Recurso Educativo">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Encabezado -->
+            <Frame BackgroundColor="#0b8043" CornerRadius="10" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="Nuevo Recurso Educativo"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="Complete los datos del recurso"
+                           FontSize="14"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Formulario -->
+            <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+
+                    <!-- Título -->
+                    <VerticalStackLayout>
+                        <Label Text="Título del Recurso *" FontAttributes="Bold"/>
+                        <Entry Placeholder="Ej: Guía de HTML5"/>
+                    </VerticalStackLayout>
+
+                    <!-- Descripción -->
+                    <VerticalStackLayout>
+                        <Label Text="Descripción *" FontAttributes="Bold"/>
+                        <Editor Placeholder="Describa el contenido del recurso..." AutoSize="TextChanges" HeightRequest="100"/>
+                    </VerticalStackLayout>
+
+                    <!-- Tipo y materia -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout>
+                            <Label Text="Tipo de Recurso *" FontAttributes="Bold"/>
+                            <Picker Title="Seleccionar...">
+                                <Picker.Items>
+                                    <x:String>Documento PDF</x:String>
+                                    <x:String>Video</x:String>
+                                    <x:String>Presentación</x:String>
+                                    <x:String>Enlace Web</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label Text="Materia Asociada *" FontAttributes="Bold"/>
+                            <Picker Title="Seleccionar materia...">
+                                <Picker.Items>
+                                    <x:String>Programación Básica</x:String>
+                                    <x:String>Bases de Datos</x:String>
+                                    <x:String>Diseño Web</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Subida de archivo (simulada) -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Enlace/Archivo *" FontAttributes="Bold"/>
+                        <Frame BorderColor="#dee2e6"
+                               BackgroundColor="#ffffff"
+                               Padding="20"
+                               CornerRadius="5"
+                               HasShadow="False">
+                            <VerticalStackLayout HorizontalOptions="Center">
+                                <Label Text="☁️"
+                                       FontSize="32"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Arrastra el archivo aquí o toca para seleccionar"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Formatos soportados: PDF, MP4, PPTX, DOCX"
+                                       FontSize="12"
+                                       TextColor="Gray"
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Checkbox -->
+                    <HorizontalStackLayout Spacing="10">
+                        <CheckBox IsChecked="True"/>
+                        <Label Text="Hacer recurso público"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Botones -->
+                    <HorizontalStackLayout HorizontalOptions="End" Spacing="15" Margin="0,20,0,0">
+                        <Button Text="❌ Cancelar"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                CornerRadius="10"/>
+                        <Button Text="💾 Guardar Recurso"
+                                BackgroundColor="#0b8043"
+                                TextColor="White"
+                                CornerRadius="10"/>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

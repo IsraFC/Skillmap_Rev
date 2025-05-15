@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Pages.EditarRolPage"
+             BackgroundColor="#f8f9fa"
+             Title="Editar Rol">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Encabezado -->
+            <Frame BackgroundColor="#1a73e8" CornerRadius="10" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="Editar Rol: Docente"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="ID: ROL-DOC | Creado: 15/01/2025"
+                           FontSize="14"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Formulario -->
+            <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+
+                    <!-- Nombre e ID -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout>
+                            <Label Text="Nombre del Rol *"/>
+                            <Entry Text="Docente"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout>
+                            <Label Text="ID Rol"/>
+                            <Entry Text="ROL-DOC" IsEnabled="False"/>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Permisos -->
+                    <VerticalStackLayout>
+                        <Label Text="Permisos *"/>
+                        <Frame BorderColor="#dee2e6" CornerRadius="5" Padding="15" BackgroundColor="#f2f2f2">
+                            <VerticalStackLayout Spacing="12">
+                                <CheckBox IsChecked="True" IsEnabled="False">
+                                    <Label Text="Ver materias asignadas"/>
+                                </CheckBox>
+                                <CheckBox IsChecked="True">
+                                    <Label Text="Gestionar recursos"/>
+                                </CheckBox>
+                                <CheckBox>
+                                    <Label Text="Calificar estudiantes"/>
+                                </CheckBox>
+                                <CheckBox IsChecked="True">
+                                    <Label Text="Subir material"/>
+                                </CheckBox>
+                                <CheckBox>
+                                    <Label Text="Generar reportes"/>
+                                </CheckBox>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Alerta -->
+                    <Frame BackgroundColor="#fff3cd" BorderColor="#ffeeba" CornerRadius="5" Padding="10">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="👥" FontSize="20"/>
+                            <Label Text="12 usuarios tienen este rol asignado." VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <!-- Switch de activación -->
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Rol activo" VerticalOptions="Center"/>
+                        <Switch IsToggled="True"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Botones -->
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,20,0,0">
+                        <Button Text="⬅ Volver"
+                                BackgroundColor="Gray"
+                                TextColor="White"
+                                CornerRadius="10"
+                                Grid.Column="0"/>
+                        <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="10">
+                            <Button Text="🗑 Desactivar"
+                                    BackgroundColor="#d93025"
+                                    TextColor="White"
+                                    CornerRadius="10"/>
+                            <Button Text="💾 Guardar Cambios"
+                                    BackgroundColor="#1a73e8"
+                                    TextColor="White"
+                                    CornerRadius="10"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
