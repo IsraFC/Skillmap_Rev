@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Pages.TiposRecursosListadoPage"
+             Title="Tipos de Recursos"
+             BackgroundColor="#f8f9fa">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Encabezado -->
+            <Frame BackgroundColor="#1a73e8" CornerRadius="10" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="🏷️ Tipos de Recursos"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Botón Nuevo Tipo -->
+            <Button Text="➕ Nuevo Tipo"
+                    BackgroundColor="#1a73e8"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="40"
+                    HorizontalOptions="Start"/>
+
+            <!-- Tabla simulada -->
+            <Grid ColumnDefinitions="Auto,*,*,*,Auto" RowSpacing="10" Padding="0,10">
+                <!-- Encabezados -->
+                <Label Text="ID" FontAttributes="Bold" Grid.Column="0"/>
+                <Label Text="Nombre" FontAttributes="Bold" Grid.Column="1"/>
+                <Label Text="Extensión" FontAttributes="Bold" Grid.Column="2"/>
+                <Label Text="Recursos" FontAttributes="Bold" Grid.Column="3"/>
+                <Label Text="Acciones" FontAttributes="Bold" Grid.Column="4"/>
+
+                <!-- Fila de ejemplo -->
+                <Label Text="TYP-1" Grid.Column="0" Grid.Row="1"/>
+                <Label Text="Documento PDF" Grid.Column="1" Grid.Row="1"/>
+                <Label Text=".pdf" Grid.Column="2" Grid.Row="1"/>
+                <Label Text="24" Grid.Column="3" Grid.Row="1"/>
+                <HorizontalStackLayout Grid.Column="4" Grid.Row="1" Spacing="5">
+                    <Button Text="✏️" BackgroundColor="#1a73e8" TextColor="White" CornerRadius="6" WidthRequest="35" HeightRequest="30"/>
+                    <Button Text="🗑️" BackgroundColor="#d93025" TextColor="White" CornerRadius="6" WidthRequest="35" HeightRequest="30"/>
+                </HorizontalStackLayout>
+            </Grid>
+
+            <!-- Simulación de Modal (en MAUI será otra pantalla o pop-up real) -->
+            <Frame BorderColor="#cccccc" Padding="15" CornerRadius="10" BackgroundColor="White">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="➕ Nuevo Tipo de Recurso" FontAttributes="Bold" FontSize="18"/>
+                    <Entry Placeholder="Nombre (Ej: Video Tutorial)" />
+                    <Entry Placeholder="Extensión (Ej: .mp4)" />
+                    <HorizontalStackLayout Spacing="10" Margin="0,10,0,0">
+                        <Button Text="Cancelar" BackgroundColor="#e0e0e0" TextColor="Black" CornerRadius="10"/>
+                        <Button Text="Guardar" BackgroundColor="#1a73e8" TextColor="White" CornerRadius="10"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

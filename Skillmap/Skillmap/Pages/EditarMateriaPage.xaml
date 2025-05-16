@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Pages.EditarMateriaPage"
+             BackgroundColor="#f8f9fa"
+             Title="Editar Materia">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Header -->
+            <Frame BackgroundColor="#1a73e8" CornerRadius="10" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="Editar Materia"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White"/>
+                    <Label Text="Código: MAT-101 | Creada: 15/05/2025"
+                           FontSize="14"
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Formulario -->
+            <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+
+                    <!-- Código y Semestre -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout>
+                            <Label Text="Código *" FontAttributes="Bold"/>
+                            <Entry Text="MAT-101" Placeholder="Ej: MAT-101"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label Text="Semestre *" FontAttributes="Bold"/>
+                            <Picker Title="Selecciona el semestre" SelectedIndex="2">
+                                <Picker.Items>
+                                    <x:String>1</x:String>
+                                    <x:String>2</x:String>
+                                    <x:String>3</x:String>
+                                    <x:String>4</x:String>
+                                    <x:String>5</x:String>
+                                    <x:String>6</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Nombre -->
+                    <VerticalStackLayout>
+                        <Label Text="Nombre *" FontAttributes="Bold"/>
+                        <Entry Text="Programación Básica" Placeholder="Nombre de la materia"/>
+                    </VerticalStackLayout>
+
+                    <!-- Docente -->
+                    <VerticalStackLayout>
+                        <Label Text="Docente *" FontAttributes="Bold"/>
+                        <Picker Title="Selecciona docente" SelectedIndex="1">
+                            <Picker.Items>
+                                <x:String>Dr. Rodríguez</x:String>
+                                <x:String>Dra. Sánchez</x:String>
+                                <x:String>Mtro. López</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </VerticalStackLayout>
+
+                    <!-- Botones -->
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10" Margin="0,20,0,0">
+                        <!-- Volver -->
+                        <Button Text="⬅ Volver"
+                                BackgroundColor="Gray"
+                                TextColor="White"
+                                CornerRadius="10"
+                                Grid.Column="0"/>
+
+                        <!-- Eliminar / Guardar -->
+                        <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="10">
+                            <Button Text="🗑 Eliminar"
+                                    BackgroundColor="#d93025"
+                                    TextColor="White"
+                                    CornerRadius="10"/>
+                            <Button Text="💾 Guardar Cambios"
+                                    BackgroundColor="#1a73e8"
+                                    TextColor="White"
+                                    CornerRadius="10"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
