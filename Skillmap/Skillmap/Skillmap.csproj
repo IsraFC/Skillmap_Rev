@@ -57,62 +57,77 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Views\Views\**" />
+	  <AndroidResource Remove="ViewModels\**" />
+	  <Compile Remove="Views\Views\**" />
+	  <Compile Remove="ViewModels\**" />
+	  <EmbeddedResource Remove="Views\Views\**" />
+	  <EmbeddedResource Remove="ViewModels\**" />
+	  <MauiCss Remove="Views\Views\**" />
+	  <MauiCss Remove="ViewModels\**" />
+	  <MauiXaml Remove="Views\Views\**" />
+	  <MauiXaml Remove="ViewModels\**" />
+	  <None Remove="Views\Views\**" />
+	  <None Remove="ViewModels\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.3">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Pages\AllSemestersPage.xaml">
+	  <MauiXaml Update="Views\AllSemestersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\EditProfilePage.xaml">
+	  <MauiXaml Update="Views\EditProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\FavouritesPage.xaml">
+	  <MauiXaml Update="Views\FavouritesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\LoginPage.xaml">
+	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\MainPage.xaml">
+	  <MauiXaml Update="Views\MainPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\UsuariosPage.xaml">
+	  <MauiXaml Update="Views\UsuariosPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\ProfilePage.xaml">
+	  <MauiXaml Update="Views\ProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\ResourcesDetailPage.xaml">
+	  <MauiXaml Update="Views\ResourcesDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\ResourcesPage.xaml">
+	  <MauiXaml Update="Views\ResourcesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\SemesterSubjectsPage.xaml">
+	  <MauiXaml Update="Views\SemesterSubjectsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\SettingsPage.xaml">
+	  <MauiXaml Update="Views\SettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="ViewModels\" />
-	  <Folder Include="Pages\Views\" />
+	  <ProjectReference Include="..\SkillmapLib1\SkillmapLib1.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\AllSemestersPage.xaml.cs">
+	  <Compile Update="Views\AllSemestersPage.xaml.cs">
 	    <DependentUpon>AllSemestersPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\UsuariosPage.xaml.cs">
+	  <Compile Update="Views\UsuariosPage.xaml.cs">
 	    <DependentUpon>UsuariosPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
