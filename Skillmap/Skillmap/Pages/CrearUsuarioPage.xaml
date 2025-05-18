@@ -25,19 +25,25 @@
             <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
                 <VerticalStackLayout Spacing="15">
 
+                    <!-- ID -->
+                    <VerticalStackLayout>
+                        <Label Text="ID de Usuario *" FontAttributes="Bold"/>
+                        <Entry x:Name="IdEntry" Placeholder="Ej: 1001" Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+
                     <!-- Nombre y apellidos -->
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                         <VerticalStackLayout>
                             <Label Text="Nombre(s) *" FontAttributes="Bold"/>
-                            <Entry Placeholder="Ej: Juan"/>
+                            <Entry x:Name="NombreEntry" Placeholder="Ej: Juan"/>
                         </VerticalStackLayout>
                         <VerticalStackLayout>
                             <Label Text="Apellido Paterno *" FontAttributes="Bold"/>
-                            <Entry Placeholder="Ej: Pérez"/>
+                            <Entry x:Name="ApellidoPEntry" Placeholder="Ej: Pérez"/>
                         </VerticalStackLayout>
                         <VerticalStackLayout>
                             <Label Text="Apellido Materno" FontAttributes="Bold"/>
-                            <Entry Placeholder="Ej: López"/>
+                            <Entry x:Name="ApellidoMEntry" Placeholder="Ej: López"/>
                         </VerticalStackLayout>
                     </Grid>
 
@@ -45,11 +51,11 @@
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <VerticalStackLayout>
                             <Label Text="Correo Electrónico *" FontAttributes="Bold"/>
-                            <Entry Placeholder="usuario@dominio.com" Keyboard="Email"/>
+                            <Entry x:Name="CorreoEntry" Placeholder="usuario@dominio.com" Keyboard="Email"/>
                         </VerticalStackLayout>
                         <VerticalStackLayout>
                             <Label Text="Rol *" FontAttributes="Bold"/>
-                            <Picker Title="Seleccionar rol...">
+                            <Picker x:Name="RolPicker" Title="Seleccionar rol...">
                                 <Picker.Items>
                                     <x:String>Administrador</x:String>
                                     <x:String>Docente</x:String>
@@ -63,8 +69,7 @@
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <VerticalStackLayout>
                             <Label Text="Contraseña *" FontAttributes="Bold"/>
-                            <Entry Placeholder="********" IsPassword="True" x:Name="PasswordEntry"/>
-                            <!-- Simulación barra de fuerza -->
+                            <Entry x:Name="PasswordEntry" Placeholder="********" IsPassword="True"/>
                             <BoxView HeightRequest="5"
                                      CornerRadius="3"
                                      x:Name="PasswordStrengthBar"
@@ -76,15 +81,14 @@
 
                         <VerticalStackLayout>
                             <Label Text="Confirmar Contraseña *" FontAttributes="Bold"/>
-                            <Entry Placeholder="********" IsPassword="True"/>
+                            <Entry x:Name="ConfirmarPasswordEntry" Placeholder="********" IsPassword="True"/>
                         </VerticalStackLayout>
                     </Grid>
 
                     <!-- Checkbox -->
                     <HorizontalStackLayout Spacing="10">
-                        <CheckBox IsChecked="True"/>
-                        <Label Text="Enviar credenciales por correo"
-                               VerticalOptions="Center"/>
+                        <CheckBox x:Name="EnviarCredencialesCheckbox" IsChecked="True"/>
+                        <Label Text="Enviar credenciales por correo" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                     <!-- Botones -->

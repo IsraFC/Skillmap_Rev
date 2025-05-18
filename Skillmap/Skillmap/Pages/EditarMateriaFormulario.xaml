@@ -22,48 +22,72 @@
             </Frame>
 
             <!-- Formulario -->
-            <VerticalStackLayout Spacing="15">
-                <Label Text="Nombre" FontAttributes="Bold"/>
-                <Entry Text="Bases de Datos"
-                       BackgroundColor="White"
-                       Placeholder="Nombre de la materia"/>
+            <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
+                <VerticalStackLayout Spacing="15">
 
-                <Label Text="Semestre" FontAttributes="Bold"/>
-                <Picker Title="Seleccionar semestre"
-                        SelectedIndex="1">
-                    <Picker.Items>
-                        <x:String>3</x:String>
-                        <x:String>4</x:String>
-                        <x:String>5</x:String>
-                    </Picker.Items>
-                </Picker>
+                    <!-- ID de Materia (solo lectura) -->
+                    <VerticalStackLayout>
+                        <Label Text="ID de Materia *" FontAttributes="Bold"/>
+                        <Entry Text="MAT-205" IsReadOnly="True" BackgroundColor="#f0f0f0"/>
+                    </VerticalStackLayout>
 
-                <Label Text="Docente" FontAttributes="Bold"/>
-                <Picker Title="Seleccionar docente"
-                        SelectedIndex="1">
-                    <Picker.Items>
-                        <x:String>Dra. Sánchez</x:String>
-                        <x:String>Dr. Rodríguez</x:String>
-                    </Picker.Items>
-                </Picker>
-            </VerticalStackLayout>
+                    <!-- Nombre -->
+                    <VerticalStackLayout>
+                        <Label Text="Nombre *" FontAttributes="Bold"/>
+                        <Entry Text="Bases de Datos"
+                               Placeholder="Nombre de la materia"
+                               BackgroundColor="White"/>
+                    </VerticalStackLayout>
 
-            <!-- Botones de acción -->
-            <HorizontalStackLayout Spacing="15" Margin="0,20,0,0">
-                <Button Text="Volver"
-                        BackgroundColor="Transparent"
-                        BorderColor="#1a73e8"
-                        TextColor="#1a73e8"
-                        BorderWidth="1"/>
+                    <!-- Semestre -->
+                    <VerticalStackLayout>
+                        <Label Text="Semestre *" FontAttributes="Bold"/>
+                        <Picker Title="Seleccionar semestre" SelectedIndex="1">
+                            <Picker.Items>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </VerticalStackLayout>
 
-                <Button Text="Eliminar"
-                        BackgroundColor="#d93025"
-                        TextColor="White"/>
+                    <!-- Docente -->
+                    <VerticalStackLayout>
+                        <Label Text="Docente Asignado *" FontAttributes="Bold"/>
+                        <Picker Title="Seleccionar docente" SelectedIndex="1">
+                            <Picker.Items>
+                                <x:String>Dra. Sánchez</x:String>
+                                <x:String>Dr. Rodríguez</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </VerticalStackLayout>
 
-                <Button Text="Guardar"
-                        BackgroundColor="#1a73e8"
-                        TextColor="White"/>
-            </HorizontalStackLayout>
+                    <!-- Estado -->
+                    <HorizontalStackLayout Spacing="10">
+                        <CheckBox IsChecked="True"/>
+                        <Label Text="Materia activa"
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Botones -->
+                    <HorizontalStackLayout Spacing="15" Margin="0,20,0,0">
+                        <Button Text="⬅ Volver al listado"
+                                BackgroundColor="Transparent"
+                                BorderColor="#1a73e8"
+                                TextColor="#1a73e8"
+                                BorderWidth="1"/>
+
+                        <Button Text="🗑 Eliminar"
+                                BackgroundColor="#d93025"
+                                TextColor="White"/>
+
+                        <Button Text="💾 Guardar cambios"
+                                BackgroundColor="#1a73e8"
+                                TextColor="White"/>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
 
         </VerticalStackLayout>
     </ScrollView>

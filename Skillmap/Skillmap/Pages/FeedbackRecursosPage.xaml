@@ -15,37 +15,68 @@
                            FontSize="24"
                            FontAttributes="Bold"
                            TextColor="White"/>
+                    <Label Text="Comentarios recientes sobre recursos educativos"
+                           FontSize="14"
+                           TextColor="White"/>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Tabla simulada -->
-            <Grid ColumnDefinitions="*,*,Auto,*,*,Auto"
-                  RowSpacing="10"
-                  ColumnSpacing="10">
+            <!-- Feedback Listado -->
+            <CollectionView>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="15"/>
+                </CollectionView.ItemsLayout>
 
-                <!-- Encabezados -->
-                <Label Text="Recurso" FontAttributes="Bold" Grid.Row="0" Grid.Column="0"/>
-                <Label Text="Usuario" FontAttributes="Bold" Grid.Row="0" Grid.Column="1"/>
-                <Label Text="Calificación" FontAttributes="Bold" Grid.Row="0" Grid.Column="2"/>
-                <Label Text="Comentario" FontAttributes="Bold" Grid.Row="0" Grid.Column="3"/>
-                <Label Text="Fecha" FontAttributes="Bold" Grid.Row="0" Grid.Column="4"/>
-                <Label Text="Acciones" FontAttributes="Bold" Grid.Row="0" Grid.Column="5"/>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="White"
+                               BorderColor="#dee2e6"
+                               CornerRadius="8"
+                               Padding="15"
+                               HasShadow="True">
 
-                <!-- Fila de ejemplo -->
-                <Label Text="Guía HTML5" Grid.Row="1" Grid.Column="0"/>
-                <Label Text="maria@mail.com" Grid.Row="1" Grid.Column="1"/>
-                <Label Text="⭐ 5" TextColor="Green" FontAttributes="Bold" Grid.Row="1" Grid.Column="2"/>
-                <Label Text="Muy útil para principiantes" Grid.Row="1" Grid.Column="3"/>
-                <Label Text="15/05/2025" Grid.Row="1" Grid.Column="4"/>
-                <Button Text="🗑️"
-                        BackgroundColor="#d93025"
-                        TextColor="White"
-                        CornerRadius="6"
-                        WidthRequest="35"
-                        HeightRequest="30"
-                        Grid.Row="1"
-                        Grid.Column="5"/>
-            </Grid>
+                            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                <!-- Recurso y Fecha -->
+                                <Label Text="📘 Guía HTML5"
+                                       FontAttributes="Bold"
+                                       Grid.Row="0" Grid.Column="0"/>
+                                <Label Text="15/05/2025"
+                                       FontSize="12"
+                                       TextColor="Gray"
+                                       HorizontalOptions="End"
+                                       Grid.Row="0" Grid.Column="1"/>
+
+                                <!-- Usuario y calificación -->
+                                <Label Text="maria@mail.com"
+                                       FontSize="12"
+                                       TextColor="Gray"
+                                       Grid.Row="1" Grid.Column="0"/>
+                                <Label Text="⭐ 5"
+                                       FontAttributes="Bold"
+                                       TextColor="Green"
+                                       HorizontalOptions="End"
+                                       Grid.Row="1" Grid.Column="1"/>
+
+                                <!-- Comentario y acción -->
+                                <Label Text="Muy útil para principiantes"
+                                       Grid.Row="2" Grid.Column="0"
+                                       Grid.ColumnSpan="1"/>
+                                <Button Text="🗑 Eliminar"
+                                        BackgroundColor="#d93025"
+                                        TextColor="White"
+                                        CornerRadius="6"
+                                        HeightRequest="30"
+                                        WidthRequest="90"
+                                        FontSize="12"
+                                        HorizontalOptions="End"
+                                        Grid.Row="2"
+                                        Grid.Column="1"/>
+                            </Grid>
+
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>

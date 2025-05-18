@@ -6,7 +6,6 @@ namespace Skillmap.Pages
         {
             InitializeComponent();
 
-            // Simulación de barra de fortaleza
             PasswordEntry.TextChanged += (s, e) =>
             {
                 var length = e.NewTextValue?.Length ?? 0;

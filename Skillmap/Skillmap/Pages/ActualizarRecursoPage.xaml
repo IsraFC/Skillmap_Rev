@@ -25,16 +25,23 @@
             <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
                 <VerticalStackLayout Spacing="15">
 
+                    <!-- ID del recurso (solo lectura) -->
+                    <VerticalStackLayout>
+                        <Label Text="ID del Recurso *" FontAttributes="Bold"/>
+                        <Entry Text="REC-205" IsReadOnly="True" BackgroundColor="#f0f0f0"/>
+                    </VerticalStackLayout>
+
                     <!-- Título -->
                     <VerticalStackLayout>
                         <Label Text="Título *" FontAttributes="Bold"/>
-                        <Entry Text="Guía Completa de HTML5"/>
+                        <Entry Text="Guía Completa de HTML5" Placeholder="Título del recurso"/>
                     </VerticalStackLayout>
 
                     <!-- Descripción -->
                     <VerticalStackLayout>
                         <Label Text="Descripción *" FontAttributes="Bold"/>
                         <Editor Text="Este recurso contiene todos los elementos de HTML5 con ejemplos prácticos y ejercicios."
+                                Placeholder="Describa el contenido..."
                                 AutoSize="TextChanges"
                                 HeightRequest="100"/>
                     </VerticalStackLayout>

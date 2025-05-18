@@ -25,32 +25,31 @@
             <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
                 <VerticalStackLayout Spacing="15">
 
-                    <!-- Código y Semestre -->
-                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                        <VerticalStackLayout>
-                            <Label Text="Código *" FontAttributes="Bold"/>
-                            <Entry Text="MAT-101" Placeholder="Ej: MAT-101"/>
-                        </VerticalStackLayout>
-
-                        <VerticalStackLayout>
-                            <Label Text="Semestre *" FontAttributes="Bold"/>
-                            <Picker Title="Selecciona el semestre" SelectedIndex="2">
-                                <Picker.Items>
-                                    <x:String>1</x:String>
-                                    <x:String>2</x:String>
-                                    <x:String>3</x:String>
-                                    <x:String>4</x:String>
-                                    <x:String>5</x:String>
-                                    <x:String>6</x:String>
-                                </Picker.Items>
-                            </Picker>
-                        </VerticalStackLayout>
-                    </Grid>
+                    <!-- Código (solo lectura) -->
+                    <VerticalStackLayout>
+                        <Label Text="Código *" FontAttributes="Bold"/>
+                        <Entry Text="MAT-101" IsReadOnly="True" BackgroundColor="#f0f0f0"/>
+                    </VerticalStackLayout>
 
                     <!-- Nombre -->
                     <VerticalStackLayout>
                         <Label Text="Nombre *" FontAttributes="Bold"/>
                         <Entry Text="Programación Básica" Placeholder="Nombre de la materia"/>
+                    </VerticalStackLayout>
+
+                    <!-- Semestre -->
+                    <VerticalStackLayout>
+                        <Label Text="Semestre *" FontAttributes="Bold"/>
+                        <Picker Title="Selecciona el semestre" SelectedIndex="2">
+                            <Picker.Items>
+                                <x:String>1</x:String>
+                                <x:String>2</x:String>
+                                <x:String>3</x:String>
+                                <x:String>4</x:String>
+                                <x:String>5</x:String>
+                                <x:String>6</x:String>
+                            </Picker.Items>
+                        </Picker>
                     </VerticalStackLayout>
 
                     <!-- Docente -->
@@ -65,16 +64,20 @@
                         </Picker>
                     </VerticalStackLayout>
 
+                    <!-- Estado -->
+                    <HorizontalStackLayout Spacing="10">
+                        <CheckBox IsChecked="True"/>
+                        <Label Text="Materia activa" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+
                     <!-- Botones -->
                     <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10" Margin="0,20,0,0">
-                        <!-- Volver -->
-                        <Button Text="⬅ Volver"
+                        <Button Text="⬅ Volver al listado"
                                 BackgroundColor="Gray"
                                 TextColor="White"
                                 CornerRadius="10"
                                 Grid.Column="0"/>
 
-                        <!-- Eliminar / Guardar -->
                         <HorizontalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="10">
                             <Button Text="🗑 Eliminar"
                                     BackgroundColor="#d93025"

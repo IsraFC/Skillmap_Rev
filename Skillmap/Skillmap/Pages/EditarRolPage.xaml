@@ -28,35 +28,40 @@
                     <!-- Nombre e ID -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <VerticalStackLayout>
-                            <Label Text="Nombre del Rol *"/>
+                            <Label Text="Nombre del Rol *" FontAttributes="Bold"/>
                             <Entry Text="Docente"/>
                         </VerticalStackLayout>
                         <VerticalStackLayout>
-                            <Label Text="ID Rol"/>
-                            <Entry Text="ROL-DOC" IsEnabled="False"/>
+                            <Label Text="ID Rol" FontAttributes="Bold"/>
+                            <Entry Text="ROL-DOC" IsReadOnly="True" BackgroundColor="#f0f0f0"/>
                         </VerticalStackLayout>
                     </Grid>
 
                     <!-- Permisos -->
                     <VerticalStackLayout>
-                        <Label Text="Permisos *"/>
+                        <Label Text="Permisos *" FontAttributes="Bold"/>
                         <Frame BorderColor="#dee2e6" CornerRadius="5" Padding="15" BackgroundColor="#f2f2f2">
                             <VerticalStackLayout Spacing="12">
-                                <CheckBox IsChecked="True" IsEnabled="False">
-                                    <Label Text="Ver materias asignadas"/>
-                                </CheckBox>
-                                <CheckBox IsChecked="True">
-                                    <Label Text="Gestionar recursos"/>
-                                </CheckBox>
-                                <CheckBox>
-                                    <Label Text="Calificar estudiantes"/>
-                                </CheckBox>
-                                <CheckBox IsChecked="True">
-                                    <Label Text="Subir material"/>
-                                </CheckBox>
-                                <CheckBox>
-                                    <Label Text="Generar reportes"/>
-                                </CheckBox>
+                                <HorizontalStackLayout>
+                                    <CheckBox IsChecked="True" IsEnabled="False"/>
+                                    <Label Text="Ver materias asignadas" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <CheckBox IsChecked="True"/>
+                                    <Label Text="Gestionar recursos" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <CheckBox/>
+                                    <Label Text="Calificar estudiantes" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <CheckBox IsChecked="True"/>
+                                    <Label Text="Subir material" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout>
+                                    <CheckBox/>
+                                    <Label Text="Generar reportes" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Frame>
                     </VerticalStackLayout>
@@ -69,7 +74,7 @@
                         </HorizontalStackLayout>
                     </Frame>
 
-                    <!-- Switch de activación -->
+                    <!-- Estado -->
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="Rol activo" VerticalOptions="Center"/>
                         <Switch IsToggled="True"/>
@@ -77,7 +82,7 @@
 
                     <!-- Botones -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,20,0,0">
-                        <Button Text="⬅ Volver"
+                        <Button Text="⬅ Volver al listado"
                                 BackgroundColor="Gray"
                                 TextColor="White"
                                 CornerRadius="10"

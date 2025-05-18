@@ -25,17 +25,16 @@
             <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
                 <VerticalStackLayout Spacing="15">
 
-                    <!-- Código y Semestre -->
+                    <!-- ID y Semestre -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <VerticalStackLayout>
-                            <Label Text="Código de Materia *" FontAttributes="Bold"/>
-                            <Entry Placeholder="Ej: MAT-202"/>
-                            <Label Text="Usar formato: MAT-XXX" FontSize="12" TextColor="Gray"/>
+                            <Label Text="ID de Materia *" FontAttributes="Bold"/>
+                            <Entry x:Name="IdMateriaEntry" Placeholder="Ej: 205" Keyboard="Numeric"/>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout>
                             <Label Text="Semestre *" FontAttributes="Bold"/>
-                            <Picker Title="Seleccionar semestre">
+                            <Picker x:Name="SemestrePicker" Title="Seleccionar semestre">
                                 <Picker.Items>
                                     <x:String>1</x:String>
                                     <x:String>2</x:String>
@@ -51,13 +50,13 @@
                     <!-- Nombre -->
                     <VerticalStackLayout>
                         <Label Text="Nombre de la Materia *" FontAttributes="Bold"/>
-                        <Entry Placeholder="Ej: Programación Avanzada"/>
+                        <Entry x:Name="NombreMateriaEntry" Placeholder="Ej: Programación Avanzada"/>
                     </VerticalStackLayout>
 
                     <!-- Docente -->
                     <VerticalStackLayout>
                         <Label Text="Docente Asignado *" FontAttributes="Bold"/>
-                        <Picker Title="Seleccionar docente...">
+                        <Picker x:Name="DocentePicker" Title="Seleccionar docente...">
                             <Picker.Items>
                                 <x:String>Dra. María Sánchez</x:String>
                                 <x:String>Dr. Carlos Rodríguez</x:String>
@@ -66,11 +65,10 @@
                         </Picker>
                     </VerticalStackLayout>
 
-                    <!-- Habilitar -->
+                    <!-- Checkbox de habilitación -->
                     <HorizontalStackLayout Spacing="10">
-                        <CheckBox IsChecked="True"/>
-                        <Label Text="Habilitar materia para inscripciones"
-                               VerticalOptions="Center"/>
+                        <CheckBox x:Name="HabilitarCheckBox" IsChecked="True"/>
+                        <Label Text="Habilitar materia para inscripciones" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                     <!-- Botones -->

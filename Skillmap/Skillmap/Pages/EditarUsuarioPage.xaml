@@ -29,33 +29,35 @@
 
                 <VerticalStackLayout Spacing="15">
 
+                    <!-- ID Usuario (Solo lectura) -->
+                    <VerticalStackLayout>
+                        <Label Text="ID del Usuario *" FontAttributes="Bold"/>
+                        <Entry Text="USR-101" IsReadOnly="True" BackgroundColor="#f0f0f0"/>
+                    </VerticalStackLayout>
+
                     <!-- Nombre y Apellidos -->
-                    <Grid ColumnDefinitions="*,*,*"
-                          ColumnSpacing="10">
-                        <VerticalStackLayout Grid.Column="0">
-                            <Label Text="Nombre *"
-                                   FontAttributes="Bold"/>
-                            <Entry Placeholder="Nombre" Text="María" />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                        <VerticalStackLayout>
+                            <Label Text="Nombre *" FontAttributes="Bold"/>
+                            <Entry Placeholder="Nombre" Text="María"/>
                         </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Column="1">
-                            <Label Text="Apellido Paterno *"
-                                   FontAttributes="Bold"/>
-                            <Entry Placeholder="Apellido Paterno" Text="Gómez" />
+                        <VerticalStackLayout>
+                            <Label Text="Apellido Paterno *" FontAttributes="Bold"/>
+                            <Entry Placeholder="Apellido Paterno" Text="Gómez"/>
                         </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Column="2">
+                        <VerticalStackLayout>
                             <Label Text="Apellido Materno" FontAttributes="Bold"/>
-                            <Entry Placeholder="Apellido Materno" Text="López" />
+                            <Entry Placeholder="Apellido Materno" Text="López"/>
                         </VerticalStackLayout>
                     </Grid>
 
                     <!-- Correo y Rol -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                        <VerticalStackLayout Grid.Column="0">
-                            <Label Text="Correo Electrónico *"
-                                   FontAttributes="Bold"/>
-                            <Entry Placeholder="Correo" Keyboard="Email" Text="mgomez@example.com" />
+                        <VerticalStackLayout>
+                            <Label Text="Correo Electrónico *" FontAttributes="Bold"/>
+                            <Entry Placeholder="Correo" Keyboard="Email" Text="mgomez@example.com"/>
                         </VerticalStackLayout>
-                        <VerticalStackLayout Grid.Column="1">
+                        <VerticalStackLayout>
                             <Label Text="Rol *" FontAttributes="Bold"/>
                             <Picker Title="Selecciona un rol" SelectedIndex="1">
                                 <Picker.Items>
@@ -67,19 +69,20 @@
                         </VerticalStackLayout>
                     </Grid>
 
-                    <!-- Checkbox -->
-                    <CheckBox IsChecked="True" />
-                    <Label Text="Usuario activo" FontSize="14" />
+                    <!-- Estado -->
+                    <HorizontalStackLayout Spacing="10">
+                        <CheckBox IsChecked="True"/>
+                        <Label Text="Usuario activo" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
 
                     <!-- Botones -->
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15" Margin="0,20,0,0">
                         <Button Text="⬅ Volver al listado"
                                 BackgroundColor="Gray"
                                 TextColor="White"
-                                CornerRadius="10"
-                                Grid.Column="0"/>
+                                CornerRadius="10"/>
 
-                        <HorizontalStackLayout HorizontalOptions="End" Grid.Column="1" Spacing="10">
+                        <HorizontalStackLayout HorizontalOptions="End" Spacing="10">
                             <Button Text="🗑 Eliminar"
                                     BackgroundColor="#d93025"
                                     TextColor="White"

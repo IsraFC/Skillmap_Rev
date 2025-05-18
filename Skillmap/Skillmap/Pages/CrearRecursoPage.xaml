@@ -25,23 +25,32 @@
             <Frame BackgroundColor="White" CornerRadius="10" Padding="20" HasShadow="True">
                 <VerticalStackLayout Spacing="15">
 
+                    <!-- ID recurso -->
+                    <VerticalStackLayout>
+                        <Label Text="ID del Recurso *" FontAttributes="Bold"/>
+                        <Entry x:Name="IdRecursoEntry" Placeholder="Ej: 205" Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+
                     <!-- Título -->
                     <VerticalStackLayout>
                         <Label Text="Título del Recurso *" FontAttributes="Bold"/>
-                        <Entry Placeholder="Ej: Guía de HTML5"/>
+                        <Entry x:Name="TituloEntry" Placeholder="Ej: Guía de HTML5"/>
                     </VerticalStackLayout>
 
                     <!-- Descripción -->
                     <VerticalStackLayout>
                         <Label Text="Descripción *" FontAttributes="Bold"/>
-                        <Editor Placeholder="Describa el contenido del recurso..." AutoSize="TextChanges" HeightRequest="100"/>
+                        <Editor x:Name="DescripcionEditor"
+                                Placeholder="Describa el contenido del recurso..."
+                                AutoSize="TextChanges"
+                                HeightRequest="100"/>
                     </VerticalStackLayout>
 
                     <!-- Tipo y materia -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
                         <VerticalStackLayout>
                             <Label Text="Tipo de Recurso *" FontAttributes="Bold"/>
-                            <Picker Title="Seleccionar...">
+                            <Picker x:Name="TipoRecursoPicker" Title="Seleccionar...">
                                 <Picker.Items>
                                     <x:String>Documento PDF</x:String>
                                     <x:String>Video</x:String>
@@ -53,7 +62,7 @@
 
                         <VerticalStackLayout>
                             <Label Text="Materia Asociada *" FontAttributes="Bold"/>
-                            <Picker Title="Seleccionar materia...">
+                            <Picker x:Name="MateriaPicker" Title="Seleccionar materia...">
                                 <Picker.Items>
                                     <x:String>Programación Básica</x:String>
                                     <x:String>Bases de Datos</x:String>
@@ -63,34 +72,17 @@
                         </VerticalStackLayout>
                     </Grid>
 
-                    <!-- Subida de archivo (simulada) -->
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Enlace/Archivo *" FontAttributes="Bold"/>
-                        <Frame BorderColor="#dee2e6"
-                               BackgroundColor="#ffffff"
-                               Padding="20"
-                               CornerRadius="5"
-                               HasShadow="False">
-                            <VerticalStackLayout HorizontalOptions="Center">
-                                <Label Text="☁️"
-                                       FontSize="32"
-                                       HorizontalOptions="Center"/>
-                                <Label Text="Arrastra el archivo aquí o toca para seleccionar"
-                                       FontSize="14"
-                                       HorizontalOptions="Center"/>
-                                <Label Text="Formatos soportados: PDF, MP4, PPTX, DOCX"
-                                       FontSize="12"
-                                       TextColor="Gray"
-                                       HorizontalOptions="Center"/>
-                            </VerticalStackLayout>
-                        </Frame>
+                    <!-- Subida o link del recurso -->
+                    <VerticalStackLayout>
+                        <Label Text="Ruta del Archivo o Enlace *" FontAttributes="Bold"/>
+                        <Entry x:Name="RutaArchivoEntry" Placeholder="Ej: https://... o archivo.pdf"/>
+                        <Label Text="Formatos soportados: PDF, MP4, PPTX, DOCX" FontSize="12" TextColor="Gray"/>
                     </VerticalStackLayout>
 
                     <!-- Checkbox -->
                     <HorizontalStackLayout Spacing="10">
-                        <CheckBox IsChecked="True"/>
-                        <Label Text="Hacer recurso público"
-                               VerticalOptions="Center"/>
+                        <CheckBox x:Name="EsPublicoCheckBox" IsChecked="True"/>
+                        <Label Text="Hacer recurso público" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                     <!-- Botones -->
@@ -102,7 +94,9 @@
                         <Button Text="💾 Guardar Recurso"
                                 BackgroundColor="#0b8043"
                                 TextColor="White"
-                                CornerRadius="10"/>
+                                CornerRadius="10"
+                                Clicked="OnGuardarClicked"/>
+
                     </HorizontalStackLayout>
 
                 </VerticalStackLayout>
