@@ -86,9 +86,22 @@ namespace Skillmap.Services
             }
         }
 
+        // OBTENER USUARIOS
+        public async Task<List<UserWithRoleOutputDTO>> GetAllUsers()
+        {
+            var response = await _client.GetAsync("api/User/all");
+            response.EnsureSuccessStatusCode();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var users = await JsonSerializer.DeserializeAsync<List<UserWithRoleOutputDTO>>(stream, _serializerOptions);
+            return users ?? [];
+        }
+
         // SUBJECTS ------------------------------------------------------------------
         public async Task<List<SubjectOutputDTO>> GetSubjects()
         {
+            await EnsureAuthorized();
+
             var response = await _client.GetAsync("api/Subject");
             response.EnsureSuccessStatusCode();
 
@@ -144,6 +157,17 @@ namespace Skillmap.Services
             return await _client.PostAsJsonAsync("api/SubjectResource", sr, _serializerOptions);
         }
 
+        public async Task<List<SubjectResource>> GetAllSubjectResources()
+        {
+            var response = await _client.GetAsync("api/SubjectResource");
+            response.EnsureSuccessStatusCode();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var result = await JsonSerializer.DeserializeAsync<List<SubjectResource>>(stream, _serializerOptions);
+
+            return result ?? [];
+        }
+
         public async Task DeleteSubjectResource(int idSubject, int idResource)
         {
             await _client.DeleteAsync($"api/SubjectResource/{idSubject}/{idResource}");
@@ -179,6 +203,99 @@ namespace Skillmap.Services
             var stream = await response.Content.ReadAsStreamAsync();
             var resources = await JsonSerializer.DeserializeAsync<List<ResourcesItem>>(stream, _serializerOptions);
             return resources ?? [];
+        }
+
+        // Obtener un recurso por id
+        public async Task<ResourcesItem?> GetResourceById(int id)
+        {
+            var response = await _client.GetAsync($"api/Resource/{id}");
+            response.EnsureSuccessStatusCode();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            return await JsonSerializer.DeserializeAsync<ResourcesItem>(stream, _serializerOptions);
+        }
+
+        public async Task<List<ResourcePerSubjectOutputDTO>> GetResourcesBySubject(int subjectId)
+        {
+            var response = await _client.GetAsync($"api/SubjectResource/subject/{subjectId}");
+            response.EnsureSuccessStatusCode();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var list = await JsonSerializer.DeserializeAsync<List<ResourcePerSubjectOutputDTO>>(stream, _serializerOptions);
+            return list ?? [];
+        }
+
+        public async Task<bool> RestoreSession()
+        {
+            try
+            {
+                var token = await SecureStorage.GetAsync("accessToken");
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _authorizationKey = token;
+                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationKey);
+                    _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Crear recurso
+        public async Task<ResourcesItem?> CreateResource(ResourcesItem resource)
+        {
+            var response = await _client.PostAsJsonAsync("api/Resource", resource, _serializerOptions);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var created = await JsonSerializer.DeserializeAsync<ResourcesItem>(stream, _serializerOptions);
+            return created;
+        }
+
+        // Obtener recursos por materia
+        public async Task<List<ResourcePerSubjectOutputDTO>> GetResourcesBySubjectAll()
+        {
+            var response = await _client.GetAsync("api/SubjectResource");
+            response.EnsureSuccessStatusCode();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var list = await JsonSerializer.DeserializeAsync<List<ResourcePerSubjectOutputDTO>>(stream, _serializerOptions);
+            return list ?? [];
+        }
+
+
+        // Actualizar recurso
+        public async Task<HttpResponseMessage> UpdateResource(int id, ResourcesItem resource)
+        {
+            return await _client.PutAsJsonAsync($"api/Resource/{id}", resource);
+        }
+
+        // Eliminar recurso
+        public async Task DeleteResource(int id)
+        {
+            await _client.DeleteAsync($"api/Resource/{id}");
+        }
+
+        private async Task EnsureAuthorized()
+        {
+            if (string.IsNullOrEmpty(_authorizationKey))
+            {
+                var token = await SecureStorage.GetAsync("accessToken");
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _authorizationKey = token;
+                    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationKey);
+                    _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                }
+            }
         }
     }
 }

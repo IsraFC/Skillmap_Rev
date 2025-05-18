@@ -1,32 +1,40 @@
+using Skillmap.Services;
+using SkillmapLib1.Models;
+using Microsoft.Maui.Controls;
+
 namespace Skillmap.Views;
-using Skillmap.Models;
 
 public partial class FavoritesPage : ContentPage
 {
-    private List<ResourcesItem> allFavorites = new List<ResourcesItem>();
+    private readonly HttpService _httpService;
+    private List<ResourcesItem> allFavorites = new();
+
     /// <summary>
     /// Default constructor
     /// </summary>
     public FavoritesPage()
 	{
 		InitializeComponent();
-        LoadFavorites();
-	}
+        _httpService = (HttpService)App.Current.Handler.MauiContext.Services.GetService(typeof(HttpService));
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await LoadFavoritesDesdeApi();
+    }
 
     /// <summary>
     /// Muestra los recursos guardados en los favoritos del usuario
     /// </summary>
-    private void LoadFavorites()
+    private async Task LoadFavoritesDesdeApi()
     {
-        // Datos de ejemplo
-        allFavorites = new List<ResourcesItem>
-        {
-            new ResourcesItem { Title = "Curso de MAUI", Description = "Introducción a .NET MAUI", UploadDate = new DateOnly(2024,01,20)},
-            new ResourcesItem { Title = "Fundamentos de C#", Description = "Aprende los conceptos básicos de C#", UploadDate = new DateOnly(2024,01,25)},
-            new ResourcesItem { Title = "Desarrollo Web", Description = "HTML, CSS y JavaScript" , UploadDate = new DateOnly(2024,01,30)}
-        };
+        var recursos = await _httpService.GetResources();
+        int cantidad = recursos.Count / 2;
 
-        // Asignar datos a la lista
+        var random = new Random();
+        allFavorites = recursos.OrderBy(x => random.Next()).Take(cantidad).ToList();
+
         favoritesCollectionView.ItemsSource = allFavorites;
     }
 
@@ -38,7 +46,9 @@ public partial class FavoritesPage : ContentPage
     private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
     {
         string searchText = e.NewTextValue.ToLower();
-        favoritesCollectionView.ItemsSource = allFavorites.Where(f => f.Title.ToLower().Contains(searchText)).ToList();
+        favoritesCollectionView.ItemsSource = allFavorites
+            .Where(f => f.Title.ToLower().Contains(searchText))
+            .ToList();
     }
 
     /// <summary>
@@ -51,13 +61,7 @@ public partial class FavoritesPage : ContentPage
         var button = sender as Button;
         if (button?.BindingContext is ResourcesItem selectedFavorite)
         {
-            await Navigation.PushAsync(new ResourcesDetailPage(new ResourcesItem
-            {
-                Title = selectedFavorite.Title,
-                Description = selectedFavorite.Description,
-                Link = "https://www.example.com",
-                UploadDate = selectedFavorite.UploadDate,
-            }));
+            await Navigation.PushAsync(new ResourcesDetailPage(selectedFavorite));
         }
     }
 }

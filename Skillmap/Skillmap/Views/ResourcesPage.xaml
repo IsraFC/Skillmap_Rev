@@ -8,7 +8,7 @@
 
     <!-- ScrollView permite desplazamiento si el contenido excede el tamaño de la pantalla -->
         <ScrollView>
-        <VerticalStackLayout Padding="10"> <!-- Contenedor principal en formato de pila vertical -->
+        <VerticalStackLayout Padding="20" Spacing="10"> <!-- Contenedor principal en formato de pila vertical -->
 
             <!-- Título de la página -->
             <Label Text="📂 Listado De Recursos"
@@ -62,6 +62,23 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
+            <!-- Botón para agregar un nuevo recurso -->
+            <Button Text="Agregar Recurso"
+                    BackgroundColor="#b39ddb"
+                    TextColor="Black"
+                    HeightRequest="50"
+                    FontSize="18"
+                    CornerRadius="15"
+                    Clicked="OnAddResourceButtonClicked"/>
+
+            <!-- Botón para editar / eliminar favoritos -->
+            <Button Text="Modificar / Eliminar Favoritos"
+                    BackgroundColor="#9575cd"
+                    TextColor="White"
+                    HeightRequest="50"
+                    FontSize="18"
+                    CornerRadius="15"
+                    Clicked="OnEditFavoritesButtonClicked"/>
         </VerticalStackLayout>
     </ScrollView>
     

@@ -35,8 +35,7 @@
 
                     <Label Text="Todos Mis Semestres" FontSize="18" FontAttributes="Bold" TextColor="White"/>
 
-                    <CollectionView x:Name="semestersCollectionView" SelectionMode="Single"
-                                    SelectionChanged="OnSemesterSelected">
+                    <CollectionView x:Name="semestersCollectionView" SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Padding="10" Margin="5">
@@ -45,6 +44,11 @@
                                             <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
                                             <Label Text="{Binding SubjectCountText}" FontSize="14" TextColor="Gray"/>
                                         </StackLayout>
+
+                                        <!-- Agrega gesto táctil -->
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSemesterTapped" />
+                                        </Grid.GestureRecognizers>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

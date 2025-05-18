@@ -39,5 +39,28 @@ namespace SkillmapApi.Controllers
                 Role = role
             });
         }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<UserWithRoleOutputDTO>>> GetAllUsers()
+        {
+            var users = _userManager.Users.ToList();
+            var result = new List<UserWithRoleOutputDTO>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                result.Add(new UserWithRoleOutputDTO
+                {
+                    UserName = user.UserName ?? "",
+                    Name = user.Name,
+                    Father_LastName = user.Father_LastName,
+                    Mother_LastName = user.Mother_LastName,
+                    Rol = roles.FirstOrDefault() ?? ""
+                });
+            }
+
+            return Ok(result);
+        }
     }
 }

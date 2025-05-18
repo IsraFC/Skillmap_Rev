@@ -15,7 +15,9 @@
                    TextColor="Black"
                    HorizontalOptions="Center"/>
 
-            <CollectionView x:Name="subjectsCollectionView">
+            <CollectionView x:Name="subjectsCollectionView"
+                            SelectionMode="Single"
+                            SelectionChanged="OnSubjectSelected">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border BackgroundColor="White"

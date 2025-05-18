@@ -26,7 +26,8 @@ namespace Skillmap
             // ✅ Registro de páginas y sus ViewModels
             builder.Services
                 .AddTransient<LoginPage>()
-                .AddTransient<MainPage>();
+                .AddTransient<MainPage>()
+                .AddTransient<CrearMateriaPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

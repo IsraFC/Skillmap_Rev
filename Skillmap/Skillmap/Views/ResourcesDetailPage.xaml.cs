@@ -1,7 +1,7 @@
 namespace Skillmap.Views;
 
 using System.Diagnostics;
-using Skillmap.Models;
+using SkillmapLib1.Models;
 
 public partial class ResourcesDetailPage : ContentPage
 {

@@ -51,7 +51,7 @@
                                         HeightRequest="40"
                                         FontSize="14"
                                         CornerRadius="15"
-                                        Pressed="OnViewMorePressed"/>
+                                        Clicked="OnViewMorePressed"/>
                             </StackLayout>
                         </Grid>
                     </Border>

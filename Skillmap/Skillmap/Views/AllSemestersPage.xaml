@@ -1,4 +1,4 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Skillmap.Views.AllSemestersPage"
              Title="Todos los Semestres"
@@ -27,6 +27,22 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
+            <Button Text="Añadir materia" 
+                    Clicked="OnAgregarMateriaClicked"
+                    BackgroundColor="#b39ddb"
+                    TextColor="Black"
+                    HeightRequest="50"
+                    FontSize="18"
+                    CornerRadius="15"/>
+            
+            <Button Text="Modificar / Eliminar materia"
+                    Clicked="OnEditarMateriaClicked"
+                    BackgroundColor="#9575cd"
+                    TextColor="White"
+                    HeightRequest="50"
+                    FontSize="18"
+                    CornerRadius="15"/>
+            
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

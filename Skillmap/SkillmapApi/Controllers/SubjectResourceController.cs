@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using SkillmapApi.Data;
 using SkillmapLib1.Models;
+using SkillmapLib1.Models.DTO.OutputDTO;
+using SkillmapLib1.Models.DTO.InputDTO;
 
 namespace SkillmapApi.Controllers
 {
-    [Authorize(Roles = "Admin,Teacher")]
     [Route("api/[controller]")]
     [ApiController]
     public class SubjectResourceController : ControllerBase
@@ -43,18 +44,28 @@ namespace SkillmapApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SubjectResource>> Post([FromBody] SubjectResource subjectResource)
+        public async Task<ActionResult<SubjectResource>> Post([FromBody] SubjectResourceInputDTO dto)
         {
-            try
+            if (!ModelState.IsValid)
+                return BadRequest(dto);
+
+            // Validación opcional: asegurarse que existen
+            var subjectExists = await _dataContext.Subjects.AnyAsync(s => s.ID_Subject == dto.ID_Subject);
+            var resourceExists = await _dataContext.ResourcesItems.AnyAsync(r => r.Id == dto.ID_Resource);
+
+            if (!subjectExists || !resourceExists)
+                return NotFound("La materia o el recurso no existen.");
+
+            var relation = new SubjectResource
             {
-                await _dataContext.SubjectResources.AddAsync(subjectResource);
-                await _dataContext.SaveChangesAsync();
-                return Ok(subjectResource);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error al agregar la relación: {ex.Message}");
-            }
+                ID_Subject = dto.ID_Subject,
+                ID_Resource = dto.ID_Resource
+            };
+
+            await _dataContext.SubjectResources.AddAsync(relation);
+            await _dataContext.SaveChangesAsync();
+
+            return Ok(relation);
         }
 
         [HttpDelete("{idMateria}/{idRecurso}")]
@@ -76,6 +87,30 @@ namespace SkillmapApi.Controllers
             {
                 return BadRequest($"Error al eliminar la relación: {ex.Message}");
             }
+        }
+
+        [HttpGet("subject/{id}")]
+        public async Task<ActionResult<List<ResourcePerSubjectOutputDTO>>> GetResourcesBySubject(int id)
+        {
+            var result = await _dataContext.SubjectResources
+                .Where(sr => sr.ID_Subject == id)
+                .Include(sr => sr.ResourceItem)
+                .Include(sr => sr.Subject)
+                    .ThenInclude(s => s.Teacher)
+                .Select(sr => new ResourcePerSubjectOutputDTO
+                {
+                    ID_Subject = sr.Subject.ID_Subject,
+                    SubjectName = sr.Subject.Name,
+                    ID_Resource = sr.ResourceItem.Id,
+                    ResourceTitle = sr.ResourceItem.Title,
+                    Description = sr.ResourceItem.Description,
+                    Link = sr.ResourceItem.Link,
+                    UploadDate = sr.ResourceItem.UploadDate,
+                    TeacherFullName = sr.Subject.Teacher.Name + " " + sr.Subject.Teacher.Father_LastName
+                })
+                .ToListAsync();
+
+            return Ok(result);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.Maui.Controls; // Importa los controles de .NET MAUI
 using Skillmap.Models;
 using Skillmap.Services;
@@ -25,55 +26,42 @@ namespace Skillmap.Views // Define el espacio de nombres donde se encuentra la p
         /// <summary>
         /// Carga los datos correspondientes a los semestres
         /// </summary>
-        private void LoadSemesters()
+        private async Task LoadSemesters()
         {
-            allSemesters = new List<SemesterItem>
+            try
             {
-                new SemesterItem
+                // Asegura que el token esté cargado antes de hacer peticiones
+                var success = await _httpService.RestoreSession();
+                if (!success)
                 {
-                    Name = "Otoño 2022",
-                    Subjects = new List<SubjectItem>
-                    {
-                        new SubjectItem { Name = "Visión global de la carrera", Semester = "Otoño 2022" },
-                        new SubjectItem { Name = "Programación básica", Semester = "Otoño 2022" },
-                        new SubjectItem { Name = "Estructura de datos", Semester = "Otoño 2022" }
-                    }
-                },
-                new SemesterItem
-                {
-                    Name = "Primavera 2023",
-                    Subjects = new List<SubjectItem>
-                    {
-                        new SubjectItem { Name = "Programación visual y videojuegos", Semester = "Primavera 2023" },
-                        new SubjectItem { Name = "Sistemas operativos", Semester = "Primavera 2023" },
-                        new SubjectItem { Name = "Bases de datos", Semester = "Primavera 2023" }
-                    }
-                },
-                new SemesterItem
-                {
-                    Name = "Otoño 2023",
-                    Subjects = new List<SubjectItem>
-                    {
-                        new SubjectItem { Name = "Pensamiento creativo", Semester = "Otoño 2023" },
-                        new SubjectItem { Name = "Plataformas Abiertas I", Semester = "Otoño 2023" },
-                        new SubjectItem { Name = "Ingeniería de software", Semester = "Otoño 2023" }
-                    }
-                },
-                new SemesterItem
-                {
-                    Name = "Primavera 2024",
-                    Subjects = new List<SubjectItem>
-                    {
-                        new SubjectItem { Name = "Redes de computadoras", Semester = "Primavera 2024" },
-                        new SubjectItem { Name = "Computación en la nube", Semester = "Primavera 2024" },
-                        new SubjectItem { Name = "Ciberseguridad", Semester = "Primavera 2024" }
-                    }
+                    await DisplayAlert("Error", "Sesión no iniciada. Vuelve a iniciar sesión.", "OK");
+                    return;
                 }
-            };
 
-            // Solo mostrar los últimos tres semestres en la pantalla principal
-            var latestSemesters = allSemesters.TakeLast(3).ToList();
-            semestersCollectionView.ItemsSource = latestSemesters;
+                var subjects = await _httpService.GetSubjects();
+
+                // Agrupar materias por semestre y convertirlas a SemesterItem
+                var grouped = subjects
+                    .GroupBy(s => s.Semester)
+                    .Select(g => new SemesterItem
+                    {
+                        Name = g.Key,
+                        Subjects = g.ToList()
+                    })
+                    .ToList();
+
+                // guardar en el campo allSemesters
+                allSemesters = grouped;
+
+                semestersCollectionView.ItemsSource = grouped
+                    .OrderByDescending(s => s.Name)
+                    .Take(3)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudieron cargar los semestres: {ex.Message}", "OK");
+            }
         }
 
         /// <summary>
@@ -83,24 +71,22 @@ namespace Skillmap.Views // Define el espacio de nombres donde se encuentra la p
         /// <param name="e"></param>
         private async void OnShowAllSemestersClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AllSemestersPage(allSemesters));
-        }
-
-        private async void OnSemesterSelected(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.CurrentSelection.Count == 0)
-                return;
-
-            var selectedSemester = (SemesterItem)e.CurrentSelection.FirstOrDefault();
-            await Navigation.PushAsync(new SemesterSubjectsPage(selectedSemester));
-
-            // Limpiar la selección
-            ((CollectionView)sender).SelectedItem = null;
+            // Pasa la lista de semestres al constructor de la página
+            if (allSemesters is not null && allSemesters.Any())
+            {
+                await Navigation.PushAsync(new AllSemestersPage(allSemesters));
+            }
+            else
+            {
+                await DisplayAlert("Ups", "No hay semestres para mostrar.", "OK");
+            }
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            //  Recargar lista de semestres
+            await LoadSemesters();
 
             // Cargar recomendaciones
             try
@@ -112,6 +98,16 @@ namespace Skillmap.Views // Define el espacio de nombres donde se encuentra la p
             catch (Exception ex)
             {
                 await DisplayAlert("Error", $"No se pudieron cargar los recursos: {ex.Message}", "OK");
+            }
+
+
+        }
+
+        private void OnSemesterTapped(object sender, TappedEventArgs e)
+        {
+            if (sender is VisualElement view && view.BindingContext is SemesterItem tappedSemester)
+            {
+                Navigation.PushAsync(new SemesterSubjectsPage(tappedSemester));
             }
         }
     }
