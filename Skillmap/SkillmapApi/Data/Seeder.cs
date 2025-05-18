@@ -67,10 +67,11 @@ namespace SkillmapApi.Data
                 Father_LastName = "1",
                 Mother_LastName = "2",
                 Email = "admin@mail.com",
-                UserName = "admin@mail.com"
+                UserName = "admin@mail.com",
+                EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(user, "Az1234#");
+            var result = await userManager.CreateAsync(user, "Adm1234#");
 
             if (result.Succeeded)
             {
@@ -86,14 +87,15 @@ namespace SkillmapApi.Data
 
             var user2 = new User
             {
-                Name = "Teacher",
-                Father_LastName = "1",
-                Mother_LastName = "2",
-                Email = "teacher@mail.com",
-                UserName = "teacher@mail.com"
+                Name = "Mauricio",
+                Father_LastName = "Campos",
+                Mother_LastName = "Carranza",
+                Email = "teacherMau@gmail.com",
+                UserName = "teacherMau@gmail.com",
+                EmailConfirmed = true
             };
 
-            var result2 = await userManager.CreateAsync(user2, "Az5678#");
+            var result2 = await userManager.CreateAsync(user2, "Tch1234#");
 
             if (result2.Succeeded)
             {
@@ -102,6 +104,30 @@ namespace SkillmapApi.Data
             else
             {
                 foreach (var error in result2.Errors)
+                {
+                    Console.WriteLine($"- {error.Description}");
+                }
+            }
+
+            var user3 = new User
+            {
+                Name = "Israel",
+                Father_LastName = "Fernandez",
+                Mother_LastName = "Carrera",
+                Email = "studentIsra@gmail.com",
+                UserName = "studentIsra@gmail.com",
+                EmailConfirmed = true
+            };
+
+            var result3 = await userManager.CreateAsync(user3, "Std1234#");
+
+            if (result3.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user3, "Student");
+            }
+            else
+            {
+                foreach (var error in result3.Errors)
                 {
                     Console.WriteLine($"- {error.Description}");
                 }
@@ -118,6 +144,11 @@ namespace SkillmapApi.Data
             if (!await roleManager.RoleExistsAsync("Teacher"))
             {
                 await roleManager.CreateAsync(new IdentityRole("Teacher"));
+            }
+
+            if (!await roleManager.RoleExistsAsync("Student"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Student"));
             }
         }
 

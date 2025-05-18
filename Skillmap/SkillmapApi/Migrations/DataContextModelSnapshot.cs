@@ -226,12 +226,9 @@ namespace SkillmapApi.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("TeacherId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("ID_Subject");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("ID_Teacher");
 
                     b.ToTable("Subjects");
                 });
@@ -385,7 +382,9 @@ namespace SkillmapApi.Migrations
                 {
                     b.HasOne("SkillmapLib1.Models.User", "Teacher")
                         .WithMany()
-                        .HasForeignKey("TeacherId");
+                        .HasForeignKey("ID_Teacher")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Teacher");
                 });

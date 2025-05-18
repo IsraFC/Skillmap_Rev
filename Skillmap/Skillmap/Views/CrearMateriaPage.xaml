@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Views.CrearMateriaPage"
+             BackgroundColor="#f8f9fa"
+             Title="Registrar Nueva Materia"
+             Shell.TabBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Registrar Nueva Materia"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#0b8043"
+                   HorizontalOptions="Center"/>
+
+            <Entry x:Name="NombreEntry"
+                   Placeholder="Nombre de la materia"
+                   FontSize="16"
+                   TextColor="Black"/>
+
+            <Picker x:Name="SemestrePicker"
+                    Title="Seleccionar semestre"
+                    FontSize="16"
+                    BackgroundColor="#cdcdcd"
+                    TextColor="Black">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1° Semestre</x:String>
+                        <x:String>2° Semestre</x:String>
+                        <x:String>3° Semestre</x:String>
+                        <x:String>4° Semestre</x:String>
+                        <x:String>5° Semestre</x:String>
+                        <x:String>6° Semestre</x:String>
+                        <x:String>7° Semestre</x:String>
+                        <x:String>8° Semestre</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Picker x:Name="DocentePicker"
+                    Title="Seleccionar docente"
+                    FontSize="16"
+                    BackgroundColor="#cdcdcd"
+                    TextColor="Black"/>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="HabilitadoCheckBox" IsChecked="True"/>
+                <Label Text="Materia habilitada para uso" TextColor="Black" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Button Text="Registrar Materia"
+                    Clicked="OnRegistrarMateriaClicked"
+                    BackgroundColor="#0b8043"
+                    TextColor="White"
+                    CornerRadius="10"
+                    FontAttributes="Bold"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

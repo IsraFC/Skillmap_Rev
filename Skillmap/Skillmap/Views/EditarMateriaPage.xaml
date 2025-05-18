@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Views.EditarMateriaPage"
+             Title="Modificar o Eliminar Materia"
+             BackgroundColor="#f8f9fa"
+             Shell.TabBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Modificar o Eliminar Materia"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#1a73e8"
+                   HorizontalOptions="Center"/>
+
+            <!-- Picker para seleccionar materia existente -->
+            <Picker x:Name="MateriaPicker"
+                    Title="Seleccionar materia"
+                    FontSize="16"
+                    SelectedIndexChanged="OnMateriaSelected"
+                    BackgroundColor="#cdcdcd"
+                    TextColor="Black"/>
+
+            <!-- Campos para editar -->
+            <Entry x:Name="NombreEntry"
+                   Placeholder="Nombre de la materia"
+                   FontSize="16"
+                   TextColor="Black"/>
+
+            <Picker x:Name="SemestrePicker"
+                    Title="Seleccionar semestre"
+                    FontSize="16"
+                    BackgroundColor="#cdcdcd"
+                    TextColor="Black">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1° Semestre</x:String>
+                        <x:String>2° Semestre</x:String>
+                        <x:String>3° Semestre</x:String>
+                        <x:String>4° Semestre</x:String>
+                        <x:String>5° Semestre</x:String>
+                        <x:String>6° Semestre</x:String>
+                        <x:String>7° Semestre</x:String>
+                        <x:String>8° Semestre</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Picker x:Name="DocentePicker"
+                    Title="Seleccionar docente"
+                    FontSize="16"
+                    BackgroundColor="#cdcdcd"
+                    TextColor="Black"/>
+
+            <HorizontalStackLayout>
+                <CheckBox x:Name="HabilitadoCheckBox" IsChecked="True"/>
+                <Label Text="Materia habilitada para uso" TextColor="Black" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <!-- Botones -->
+            <Button Text="Actualizar Materia"
+                    x:Name="ActualizarButton"
+                    Clicked="OnActualizarMateriaClicked"
+                    BackgroundColor="#0b8043"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"/>
+
+            <Button Text="Eliminar Materia"
+                    Clicked="OnEliminarMateriaClicked"
+                    x:Name="EliminarButton"
+                    BackgroundColor="#e53935"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

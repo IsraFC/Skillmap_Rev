@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkillmapApi.Data;
 using SkillmapLib1.Models;
+using SkillmapLib1.Models.DTO.OutputDTO;
 
 namespace SkillmapApi.Controllers
 {
-    [Authorize(Roles = "Admin,Teacher")]
     [Route("api/[controller]")]
     [ApiController]
     public class SubjectController : ControllerBase
@@ -20,11 +20,35 @@ namespace SkillmapApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Subject>> Get()
+        public async Task<ActionResult<List<Subject>>> Get()
         {
-            return await _dataContext.Subjects
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user == null) return Unauthorized();
+
+            var userRoles = await _dataContext.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Join(_dataContext.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                .ToListAsync();
+
+            if (!userRoles.Contains("Admin") && !userRoles.Contains("Teacher") && !userRoles.Contains("Student"))
+                return Forbid();
+
+            var subjects = await _dataContext.Subjects
                 .Include(s => s.Teacher)
                 .ToListAsync();
+
+            var result = subjects.Select(s => new SubjectOutputDTO
+            {
+                Id_Subject = s.ID_Subject,
+                Name = s.Name,
+                Semester = s.Semester,
+                TeacherUserName = s.Teacher?.UserName ?? "",
+                TeacherFullName = s.Teacher != null
+                    ? $"{s.Teacher.Name} {s.Teacher.Father_LastName} {s.Teacher.Mother_LastName}"
+                    : "Sin asignar"
+            }).ToList();
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Página de contenido para la sección de Perfil -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Skillmap.Views.ProfilePage"
+             Title="Perfil"
+             BackgroundColor="#ECECEC">
+
+    <VerticalStackLayout Padding="20" Spacing="15" HorizontalOptions="Center">
+
+        <!-- Imagen de perfil (completamente circular) -->
+        <Frame Padding="0" CornerRadius="50" WidthRequest="120" HeightRequest="120"
+               IsClippedToBounds="True" BorderColor="Black">
+            <Image Source="profile.png"
+                   WidthRequest="120"
+                   HeightRequest="120"
+                   Aspect="AspectFill"/>
+        </Frame>
+
+        <!-- Nombre del usuario -->
+        <Label Text="Joaquín Hernández"
+               FontSize="22"
+               FontAttributes="Bold"
+               TextColor="Black"
+               HorizontalOptions="Center"/>
+
+        <!-- Correo del usuario -->
+        <Label Text="joaquin.hernandez@email.com"
+               FontSize="14"
+               TextColor="Gray"
+               HorizontalOptions="Center"/>
+
+        <!-- Opciones de configuración -->
+        <VerticalStackLayout Spacing="10" WidthRequest="300">
+
+            <Button Text="Editar Perfil"
+                    BackgroundColor="#e91d1d"
+                    TextColor="White"
+                    Clicked="OnEditProfileClicked"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    WidthRequest="250"/>
+
+            <Button Text="Configuración"
+                    BackgroundColor="#004bdf"
+                    TextColor="White"
+                    Clicked="OnSettingsClicked"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    WidthRequest="250"/>
+
+            <Button Text="Cerrar Sesión"
+                    BackgroundColor="Gray"
+                    TextColor="White"
+                    Clicked="OnLogoutClicked"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    WidthRequest="250"/>
+
+        </VerticalStackLayout>
+
+    </VerticalStackLayout>
+
+</ContentPage>
