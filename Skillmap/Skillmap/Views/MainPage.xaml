@@ -8,7 +8,7 @@
         <StackLayout Padding="20">
 
             <!-- Encabezado -->
-            <Label x:Name="userNameLabel" Text="Hola," FontSize="24" FontAttributes="Bold" TextColor="Red"/>
+            <Label Text="Bienvenido" FontSize="24" FontAttributes="Bold" TextColor="Red"/>
             <Label Text="¿Qué recursos deseas visualizar?" FontSize="14" TextColor="Gray"/>
 
             <!-- Recomendaciones -->
@@ -21,8 +21,8 @@
                     <DataTemplate>
                         <Frame BackgroundColor="White" Margin="5" Padding="5" WidthRequest="180" CornerRadius="10">
                             <StackLayout>
-                                <Label Text="{Binding Title}" FontSize="14" FontAttributes="Bold" LineBreakMode="TailTruncation"/>
-                                <Label Text="{Binding Description}" FontSize="12" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Title}" FontSize="14" FontAttributes="Bold" LineBreakMode="TailTruncation" TextColor="Black"/>
+                                <Label Text="{Binding Description}" FontSize="12" LineBreakMode="TailTruncation" TextColor="Black"/>
                             </StackLayout>
                         </Frame>
                     </DataTemplate>

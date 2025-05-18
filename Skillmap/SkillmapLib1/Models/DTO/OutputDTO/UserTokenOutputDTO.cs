@@ -9,5 +9,7 @@ namespace SkillmapLib1.Models.DTO.OutputDTO
     public class UserTokenOutputDTO
     {
         public string AccessToken { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
     }
 }

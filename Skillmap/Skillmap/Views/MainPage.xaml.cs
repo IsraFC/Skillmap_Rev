@@ -102,14 +102,10 @@ namespace Skillmap.Views // Define el espacio de nombres donde se encuentra la p
         {
             base.OnAppearing();
 
-            // Obtener nombre del usuario
-            var userName = await SecureStorage.GetAsync("userName");
-            userNameLabel.Text = $"Hola, {userName}";
-
             // Cargar recomendaciones
             try
             {
-                var recursos = await _httpService.GetFeedbacks(); // O GetResources si tienes ese método
+                var recursos = await _httpService.GetResources(); // O GetResources si tienes ese método
                 var aleatorios = recursos.OrderBy(x => Guid.NewGuid()).Take(2).ToList();
                 recommendedCollection.ItemsSource = aleatorios;
             }

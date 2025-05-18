@@ -71,7 +71,7 @@ namespace Skillmap.Services
         {
             try
             {
-                var response = await _client.GetAsync("User");
+                var response = await _client.GetAsync("api/User");
                 response.EnsureSuccessStatusCode();
 
                 var stream = await response.Content.ReadAsStreamAsync();
@@ -89,7 +89,7 @@ namespace Skillmap.Services
         // SUBJECTS ------------------------------------------------------------------
         public async Task<List<SubjectOutputDTO>> GetSubjects()
         {
-            var response = await _client.GetAsync("Subject");
+            var response = await _client.GetAsync("api/Subject");
             response.EnsureSuccessStatusCode();
 
             var stream = await response.Content.ReadAsStreamAsync();
@@ -99,23 +99,23 @@ namespace Skillmap.Services
 
         public async Task<HttpResponseMessage> CreateSubject(SubjectInputDTO subject)
         {
-            return await _client.PostAsJsonAsync("Subject", subject, _serializerOptions);
+            return await _client.PostAsJsonAsync("api/Subject", subject, _serializerOptions);
         }
 
         public async Task<HttpResponseMessage> UpdateSubject(int id, SubjectInputDTO subject)
         {
-            return await _client.PutAsJsonAsync($"Subject/{id}", subject, _serializerOptions);
+            return await _client.PutAsJsonAsync($"api/Subject/{id}", subject, _serializerOptions);
         }
 
         public async Task DeleteSubject(int id)
         {
-            await _client.DeleteAsync($"Subject/{id}");
+            await _client.DeleteAsync($"api/Subject/{id}");
         }
 
         // RESOURCE FEEDBACK ---------------------------------------------------------
         public async Task<List<ResourceFeedbackOutputDTO>> GetFeedbacks()
         {
-            var response = await _client.GetAsync("ResourceFeedback");
+            var response = await _client.GetAsync("api/ResourceFeedback");
             response.EnsureSuccessStatusCode();
 
             var stream = await response.Content.ReadAsStreamAsync();
@@ -125,34 +125,34 @@ namespace Skillmap.Services
 
         public async Task<HttpResponseMessage> CreateFeedback(ResourceFeedbackInputDTO feedback)
         {
-            return await _client.PostAsJsonAsync("ResourceFeedback", feedback, _serializerOptions);
+            return await _client.PostAsJsonAsync("api/ResourceFeedback", feedback, _serializerOptions);
         }
 
         public async Task<HttpResponseMessage> UpdateFeedback(int idResource, string username, ResourceFeedbackInputDTO feedback)
         {
-            return await _client.PutAsJsonAsync($"ResourceFeedback/{idResource}/{username}", feedback, _serializerOptions);
+            return await _client.PutAsJsonAsync($"api/ResourceFeedback/{idResource}/{username}", feedback, _serializerOptions);
         }
 
         public async Task DeleteFeedback(int idResource, string username)
         {
-            await _client.DeleteAsync($"ResourceFeedback/{idResource}/{username}");
+            await _client.DeleteAsync($"api/ResourceFeedback/{idResource}/{username}");
         }
 
         // SUBJECT-RESOURCE ----------------------------------------------------------
         public async Task<HttpResponseMessage> CreateSubjectResource(SubjectResourceInputDTO sr)
         {
-            return await _client.PostAsJsonAsync("SubjectResource", sr, _serializerOptions);
+            return await _client.PostAsJsonAsync("api/SubjectResource", sr, _serializerOptions);
         }
 
         public async Task DeleteSubjectResource(int idSubject, int idResource)
         {
-            await _client.DeleteAsync($"SubjectResource/{idSubject}/{idResource}");
+            await _client.DeleteAsync($"api/SubjectResource/{idSubject}/{idResource}");
         }
 
         // RESOURCE TYPES ------------------------------------------------------------
         public async Task<List<ResourceType>> GetResourceTypes()
         {
-            var response = await _client.GetAsync("ResourceType");
+            var response = await _client.GetAsync("api/ResourceType");
             response.EnsureSuccessStatusCode();
 
             var stream = await response.Content.ReadAsStreamAsync();
@@ -162,12 +162,23 @@ namespace Skillmap.Services
 
         public async Task<HttpResponseMessage> CreateResourceType(ResourceType type)
         {
-            return await _client.PostAsJsonAsync("ResourceType", type, _serializerOptions);
+            return await _client.PostAsJsonAsync("api/ResourceType", type, _serializerOptions);
         }
 
         public async Task DeleteResourceType(string id)
         {
-            await _client.DeleteAsync($"ResourceType/{id}");
+            await _client.DeleteAsync($"api/ResourceType/{id}");
+        }
+
+        // RESOURCES ------------------------------------------------------------------
+        public async Task<List<ResourcesItem>> GetResources()
+        {
+            var response = await _client.GetAsync("api/Resource");
+            response.EnsureSuccessStatusCode();
+
+            var stream = await response.Content.ReadAsStreamAsync();
+            var resources = await JsonSerializer.DeserializeAsync<List<ResourcesItem>>(stream, _serializerOptions);
+            return resources ?? [];
         }
     }
 }

@@ -9,7 +9,6 @@ using SkillmapLib1.Models;
 
 namespace SkillmapApi.Controllers
 {
-    [Authorize (Roles = "Admin,Teacher")]
     [Route("api/[controller]")]
     [ApiController]
     public class ResourceController : ControllerBase

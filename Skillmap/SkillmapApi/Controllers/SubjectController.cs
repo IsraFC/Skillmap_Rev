@@ -7,7 +7,7 @@ using SkillmapLib1.Models;
 
 namespace SkillmapApi.Controllers
 {
-    [Authorize(Roles = "Admin,Teacher,Student")]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SubjectController : ControllerBase
@@ -20,8 +20,20 @@ namespace SkillmapApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Subject>> Get()
+        public async Task<ActionResult<List<Subject>>> Get()
         {
+            var user = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            if (user == null)
+                return Unauthorized();
+
+            var userRoles = await _dataContext.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Join(_dataContext.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                .ToListAsync();
+
+            if (!userRoles.Contains("Admin") && !userRoles.Contains("Teacher") && !userRoles.Contains("Student"))
+                return Forbid();
+
             return await _dataContext.Subjects
                 .Include(s => s.Teacher)
                 .ToListAsync();
