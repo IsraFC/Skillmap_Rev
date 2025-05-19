@@ -33,7 +33,8 @@
                     TextColor="Black"
                     HeightRequest="50"
                     FontSize="18"
-                    CornerRadius="15"/>
+                    CornerRadius="15"
+                    x:Name="AddSubjectButton"/>
             
             <Button Text="Modificar / Eliminar materia"
                     Clicked="OnEditarMateriaClicked"

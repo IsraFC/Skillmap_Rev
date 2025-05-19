@@ -6,10 +6,21 @@ namespace Skillmap.Views
 {
     public partial class AllSemestersPage : ContentPage
     {
+        private bool isNotStudent;
+
+        public bool IsNotStudent { get => isNotStudent; set => isNotStudent = value; }
+
         public AllSemestersPage(List<SemesterItem> semesters)
         {
             InitializeComponent();
             semestersCollectionView.ItemsSource = semesters;
+            CheckUserRole();
+        }
+
+        private async void CheckUserRole()
+        {
+            string userRole = await SecureStorage.GetAsync("userRole");
+            AddSubjectButton.IsVisible = userRole == "Teacher" || userRole == "Admin";
         }
 
         private async void OnSemesterSelected(object sender, SelectionChangedEventArgs e)

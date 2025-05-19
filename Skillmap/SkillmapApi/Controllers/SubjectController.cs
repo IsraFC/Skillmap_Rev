@@ -64,6 +64,7 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpPost]
         public async Task<ActionResult<Subject>> Post([FromBody] SubjectInput data)
         {
@@ -84,7 +85,7 @@ namespace SkillmapApi.Controllers
             return Ok(subject);
         }
 
-
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Subject>> Put(int id, [FromBody] SubjectInput data)
         {
@@ -111,7 +112,7 @@ namespace SkillmapApi.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Subject>> Delete(int id)
         {

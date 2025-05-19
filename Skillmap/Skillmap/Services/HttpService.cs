@@ -34,8 +34,12 @@ namespace Skillmap.Services
                     var token = await JsonSerializer.DeserializeAsync<UserTokenOutputDTO>(contentStream, _serializerOptions);
                     _authorizationKey = token?.AccessToken;
 
+
                     if (!string.IsNullOrEmpty(_authorizationKey))
                     {
+                        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationKey);
+                        _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
                         await SecureStorage.SetAsync("accessToken", _authorizationKey);
 
                         var user = await GetCurrentUser();
@@ -46,9 +50,6 @@ namespace Skillmap.Services
                         }
                     }
                 }
-
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationKey);
-                _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 return true;
             }

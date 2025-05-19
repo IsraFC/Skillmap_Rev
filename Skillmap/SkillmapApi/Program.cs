@@ -21,6 +21,11 @@ builder.Services.AddIdentityApiEndpoints<User>(options =>
     options.Password.RequireDigit = true;
 }).AddRoles<IdentityRole>().AddEntityFrameworkStores<DataContext>(); 
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(7163); // Configura el puerto 7163
+});
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -68,7 +73,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapIdentityApi<User>();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

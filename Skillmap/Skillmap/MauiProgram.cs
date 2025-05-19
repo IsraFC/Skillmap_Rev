@@ -18,16 +18,29 @@ namespace Skillmap
                 });
 
             //  HttpClient configurado para apuntar al Web API de Skillmap
-            builder.Services.AddHttpClient<HttpService>(client =>
+            //builder.Services.AddHttpClient<HttpService>(client =>
+            //{
+            //    client.BaseAddress = new Uri("https://localhost:7163/");
+            //});
+
+            builder.Services.AddSingleton<HttpClient>(sp =>
             {
-                client.BaseAddress = new Uri("https://localhost:7163/"); // Cambia por la IP real de tu API
+                return new HttpClient
+                {
+                    BaseAddress = new Uri("http://192.168.0.169:7163/")
+                };
             });
 
-            // ✅ Registro de páginas y sus ViewModels
+
+            // Registrar HttpService como Singleton para que mantenga el token
+            builder.Services.AddSingleton<HttpService>();
+
+            // Registro de páginas y sus ViewModels
             builder.Services
                 .AddTransient<LoginPage>()
                 .AddTransient<MainPage>()
                 .AddTransient<CrearMateriaPage>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();
