@@ -29,8 +29,9 @@
 
             <Button Text="Añadir materia" 
                     Clicked="OnAgregarMateriaClicked"
-                    BackgroundColor="#b39ddb"
-                    TextColor="Black"
+                    BackgroundColor="#EB1101"
+                    FontAttributes="Bold"
+                    TextColor="White"
                     HeightRequest="50"
                     FontSize="18"
                     CornerRadius="15"
@@ -38,7 +39,8 @@
             
             <Button Text="Modificar / Eliminar materia"
                     Clicked="OnEditarMateriaClicked"
-                    BackgroundColor="#9575cd"
+                    BackgroundColor="#B50A13"
+                    FontAttributes="Bold"
                     TextColor="White"
                     HeightRequest="50"
                     FontSize="18"

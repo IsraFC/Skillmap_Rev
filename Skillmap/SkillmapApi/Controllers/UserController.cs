@@ -97,7 +97,7 @@ namespace SkillmapApi.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [Authorize (Roles = "Admin")]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO dto)
         {
             var user = await _userManager.FindByNameAsync(dto.OldUserName);

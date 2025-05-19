@@ -43,6 +43,7 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpPost]
         public async Task<ActionResult<SubjectResource>> Post([FromBody] SubjectResourceInputDTO dto)
         {
@@ -68,6 +69,7 @@ namespace SkillmapApi.Controllers
             return Ok(relation);
         }
 
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpDelete("{idMateria}/{idRecurso}")]
         public async Task<ActionResult<SubjectResource>> Delete(int idMateria, int idRecurso)
         {

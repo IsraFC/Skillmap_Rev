@@ -72,8 +72,9 @@
             <!-- Botón para agregar un nuevo recurso -->
             <Button Text="Agregar Recurso"
                     Command="{Binding AgregarRecursoCommand}"
-                    BackgroundColor="#b39ddb"
-                    TextColor="Black"
+                    BackgroundColor="#EB1101"
+                    FontAttributes="Bold"
+                    TextColor="White"
                     HeightRequest="50"
                     FontSize="18"
                     CornerRadius="15"
@@ -82,7 +83,8 @@
             <!-- Botón para editar / eliminar recursos -->
             <Button Text="Modificar / Eliminar Recursos"
                     Command="{Binding EditarRecursosCommand}"
-                    BackgroundColor="#9575cd"
+                    BackgroundColor="#B50A13"
+                    FontAttributes="Bold"
                     TextColor="White"
                     HeightRequest="50"
                     FontSize="18"

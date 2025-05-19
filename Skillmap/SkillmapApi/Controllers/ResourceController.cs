@@ -38,6 +38,7 @@ namespace SkillmapApi.Controllers
         }
 
         // POST api/<ResourceController>
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpPost]
         public async Task<ActionResult<ResourcesItem>> Post([FromBody] ResourcesItem resources)
         {
@@ -58,6 +59,7 @@ namespace SkillmapApi.Controllers
         }
 
         // PUT api/<ResourceController>/5
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpPut("{id}")]
         public async Task<ActionResult<ResourcesItem>> Put(int id, [FromBody] ResourcesItem resources)
         {
@@ -74,6 +76,7 @@ namespace SkillmapApi.Controllers
         }
 
         // DELETE api/<ResourceController>/5
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResourcesItem>> Delete(int id)
         {

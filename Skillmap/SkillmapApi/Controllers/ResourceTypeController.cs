@@ -18,6 +18,7 @@ namespace SkillmapApi.Controllers
             _context = context;
         }
 
+
         [HttpGet]
         public async Task<List<ResourceType>> Get()
         {
@@ -35,6 +36,7 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ResourceType>> Post([FromBody] ResourceType type)
         {
@@ -46,6 +48,7 @@ namespace SkillmapApi.Controllers
             return Ok(type);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResourceType>> Delete(string id)
         {

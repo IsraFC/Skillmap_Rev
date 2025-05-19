@@ -8,7 +8,6 @@ using SkillmapLib1.Models;
 
 namespace SkillmapApi.Controllers
 {
-    [Authorize(Roles = "Admin,Student")]
     [Route("api/[controller]")]
     [ApiController]
     public class ResourceFeedbackController : ControllerBase
@@ -43,6 +42,7 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles = "Admin,Student")]
         [HttpPost]
         public async Task<ActionResult<ResourceFeedback>> Post([FromBody] ResourceFeedbackInput data)
         {
@@ -63,6 +63,7 @@ namespace SkillmapApi.Controllers
             return Ok(feedback);
         }
 
+        [Authorize(Roles = "Admin,Student")]
         [HttpPut("{idRecurso}/{username}")]
         public async Task<ActionResult<ResourceFeedback>> Put(int idRecurso, string username, [FromBody] ResourceFeedbackUpdate updatedData)
         {
@@ -89,6 +90,7 @@ namespace SkillmapApi.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Teacher")]
         [HttpDelete("{idRecurso}/{username}")]
         public async Task<ActionResult<ResourceFeedback>> Delete(int idRecurso, string username)
         {

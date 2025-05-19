@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SkillmapApi.Data;
 using SkillmapLib1.Models;
 using SkillmapLib1.Models.DTO.OutputDTO;
+using SkillmapLib1.Models.DTO.InputDTO;
 
 namespace SkillmapApi.Controllers
 {
@@ -66,16 +67,16 @@ namespace SkillmapApi.Controllers
 
         [Authorize(Roles = "Admin,Teacher")]
         [HttpPost]
-        public async Task<ActionResult<Subject>> Post([FromBody] SubjectInput data)
+        public async Task<ActionResult<Subject>> Post([FromBody] SubjectInputDTO data)
         {
-            var teacher = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == data.teacherUserName);
+            var teacher = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == data.TeacherUserName);
             if (teacher == null)
                 return BadRequest("Docente no encontrado");
 
             var subject = new Subject
             {
-                Name = data.name,
-                Semester = data.semester,
+                Name = data.Name,
+                Semester = data.Semester,
                 ID_Teacher = teacher.Id
             };
 
@@ -87,9 +88,9 @@ namespace SkillmapApi.Controllers
 
         [Authorize(Roles = "Admin,Teacher")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Subject>> Put(int id, [FromBody] SubjectInput data)
+        public async Task<ActionResult<Subject>> Put(int id, [FromBody] SubjectInputDTO data)
         {
-            var teacher = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == data.teacherUserName);
+            var teacher = await _dataContext.Users.FirstOrDefaultAsync(u => u.UserName == data.TeacherUserName);
             if (teacher == null)
                 return BadRequest("Docente no encontrado");
 
@@ -97,8 +98,8 @@ namespace SkillmapApi.Controllers
             if (subject == null)
                 return NotFound();
 
-            subject.Name = data.name;
-            subject.Semester = data.semester;
+            subject.Name = data.Name;
+            subject.Semester = data.Semester;
             subject.ID_Teacher = teacher.Id;
 
             try
@@ -132,12 +133,5 @@ namespace SkillmapApi.Controllers
                 return BadRequest(ex);
             }
         }
-    }
-
-    public class SubjectInput
-    {
-        public string name { get; set; } = string.Empty;
-        public string semester { get; set; } = string.Empty;
-        public string teacherUserName { get; set; } = string.Empty;
     }
 }
