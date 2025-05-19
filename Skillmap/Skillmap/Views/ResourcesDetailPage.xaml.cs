@@ -1,6 +1,7 @@
 namespace Skillmap.Views;
 
 using System.Diagnostics;
+using Skillmap.ViewModels;
 using SkillmapLib1.Models;
 
 public partial class ResourcesDetailPage : ContentPage
@@ -10,30 +11,12 @@ public partial class ResourcesDetailPage : ContentPage
 	{
 		InitializeComponent();
 
-        // Asigna los valores del recurso a los elementos de la UI
-        titleLabel.Text = resource.Title;
-        descriptionLabel.Text = resource.Description;
-        uploadDateLabel.Text = $"Fecha de subida: {resource.UploadDate:dd/MM/yyyy}";
-        resourceLink = resource.Link;
-    }
-
-    private async void OnOpenLinkClicked(object sender, EventArgs e)
-    {
-        if (!string.IsNullOrEmpty(resourceLink))
+        if (BindingContext is ResourcesDetailViewModel vm)
         {
-            try
-            {
-                await Launcher.OpenAsync(new Uri(resourceLink));
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error al abrir el enlace: {ex.Message}");
-                await DisplayAlert("Error", "No se pudo abrir el enlace.", "OK");
-            }
-        }
-        else
-        {
-            await DisplayAlert("Aviso", "Este recurso no tiene un enlace disponible.", "OK");
+            vm.Titulo = resource.Title;
+            vm.Descripcion = resource.Description;
+            vm.Link = resource.Link;
+            vm.FechaSubida = $"Fecha de subida: {resource.UploadDate:dd/MM/yyyy}";
         }
     }
 }

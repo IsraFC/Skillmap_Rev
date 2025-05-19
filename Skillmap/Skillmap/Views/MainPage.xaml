@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
              x:Class="Skillmap.Views.MainPage"
+             x:Name="MainPageRef"
              BackgroundColor="#ECECEC">
+
+    <ContentPage.BindingContext>
+        <viewmodels:MainViewModel />
+    </ContentPage.BindingContext>
 
     <ScrollView>
         <StackLayout Padding="20">
@@ -13,10 +19,10 @@
 
             <!-- Recomendaciones -->
             <Label Text="Recomendaciones" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
-            <CollectionView x:Name="recommendedCollection"
-                ItemsLayout="HorizontalList"
-                HeightRequest="120"
-                Margin="0,0,0,10">
+            <CollectionView ItemsSource="{Binding Recomendaciones}"
+                            ItemsLayout="HorizontalList"
+                            HeightRequest="120"
+                            Margin="0,0,0,10">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame BackgroundColor="White" Margin="5" Padding="5" WidthRequest="180" CornerRadius="10">
@@ -35,7 +41,7 @@
 
                     <Label Text="Todos Mis Semestres" FontSize="18" FontAttributes="Bold" TextColor="White"/>
 
-                    <CollectionView x:Name="semestersCollectionView" SelectionMode="None">
+                    <CollectionView ItemsSource="{Binding SemestresVisibles}" SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border BackgroundColor="White" StrokeShape="RoundRectangle 10" Padding="10" Margin="5">
@@ -44,10 +50,11 @@
                                             <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="Black"/>
                                             <Label Text="{Binding SubjectCountText}" FontSize="14" TextColor="Gray"/>
                                         </StackLayout>
-
-                                        <!-- Agrega gesto táctil -->
+                                        
+                                        <!-- Agregar Gesto Tactil-->
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnSemesterTapped" />
+                                            <TapGestureRecognizer Command="{Binding BindingContext.SemestreTappedCommand, Source={x:Reference MainPageRef}}"
+                                                                  CommandParameter="{Binding .}" />
                                         </Grid.GestureRecognizers>
                                     </Grid>
                                 </Border>
@@ -56,12 +63,12 @@
                     </CollectionView>
 
                     <Button Text="Mostrar todas"
+                            Command="{Binding MostrarTodosCommand}"
                             BackgroundColor="White"
                             TextColor="Red"
                             FontAttributes="Bold"
                             CornerRadius="10"
-                            HeightRequest="40"
-                            Clicked="OnShowAllSemestersClicked"/>
+                            HeightRequest="40"/>
 
                 </StackLayout>
             </Border>

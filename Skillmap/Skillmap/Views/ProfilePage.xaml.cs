@@ -1,4 +1,5 @@
 namespace Skillmap.Views;
+using Skillmap.ViewModels;
 
 public partial class ProfilePage : ContentPage
 {
@@ -10,23 +11,13 @@ public partial class ProfilePage : ContentPage
 		InitializeComponent();
 	}
 
-    private async void OnEditProfileClicked(object sender, EventArgs e)
+    protected override void OnAppearing()
     {
-        await Navigation.PushAsync(new EditProfilePage());
-    }
+        base.OnAppearing();
 
-    private async void OnSettingsClicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new SettingsPage());
-    }
-
-    private async void OnLogoutClicked(object sender, EventArgs e)
-    {
-        bool confirm = await DisplayAlert("Cerrar Sesión", "¿Estás seguro de que quieres cerrar sesión?", "Sí", "No");
-        if (confirm)
+        if (BindingContext is ProfileViewModel vm)
         {
-            var loginPage = App.Current.Handler.MauiContext.Services.GetRequiredService<LoginPage>();
-            Application.Current.MainPage = new NavigationPage(loginPage);
+            vm.CargarUsuarioCommand.Execute(null);
         }
     }
 }

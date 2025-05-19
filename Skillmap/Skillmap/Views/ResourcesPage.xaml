@@ -2,9 +2,15 @@
 <!-- Página de contenido para la sección de Recursos -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
              x:Class="Skillmap.Views.ResourcesPage"
+             x:Name="ResourcesPageRef"
              Title="Resources Page"
              BackgroundColor="#ECECEC">
+
+    <ContentPage.BindingContext>
+        <viewmodels:ResourcesViewModel />
+    </ContentPage.BindingContext>
 
     <!-- ScrollView permite desplazamiento si el contenido excede el tamaño de la pantalla -->
         <ScrollView>
@@ -19,15 +25,15 @@
                    TextColor="Black"
                    />
 
-            <SearchBar x:Name="searchBar"
-                       Placeholder="Buscar recursos..."
+            <SearchBar Placeholder="Buscar recursos..."
+                       Text="{Binding TextoBusqueda, Mode=TwoWay}"
                        BackgroundColor="#EFEFEF"
                        TextColor="Black"
-                       Margin="0,10,0,10"
-                       TextChanged="OnSearchTextChanged"/>
+                       Margin="0,10,0,10"/>
 
             <!-- Lista de recursos -->
-            <CollectionView x:Name="resourcesCollectionView" SelectionMode="None">
+            <CollectionView ItemsSource="{Binding RecursosFiltrados}"
+                            SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border BackgroundColor="White"
@@ -40,21 +46,22 @@
                                 <!-- Información del recurso -->
                                 <StackLayout Grid.Column="1" Padding="10" Spacing="5">
                                     <Label Text="{Binding Title}"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="Black"/>
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="Black"/>
 
-                                    <Label Text= "{Binding UploadDate}"
-                                       FontSize="14"
-                                       TextColor="Gray"/>
+                                    <Label Text="{Binding UploadDate}"
+                                           FontSize="14"
+                                           TextColor="Gray"/>
 
                                     <Button Text="Ver más"
-                                        BackgroundColor="Black"
-                                        TextColor="White"
-                                        HeightRequest="40"
-                                        FontSize="14"
-                                        CornerRadius="15"
-                                        Pressed="OnViewMorePressed"/>
+                                            BackgroundColor="Black"
+                                            TextColor="White"
+                                            HeightRequest="40"
+                                            FontSize="14"
+                                            CornerRadius="15"
+                                            Command="{Binding BindingContext.VerMasCommand, Source={x:Reference ResourcesPageRef}}"
+                                            CommandParameter="{Binding .}"/>
                                 </StackLayout>
                             </Grid>
                         </Border>
@@ -64,21 +71,23 @@
 
             <!-- Botón para agregar un nuevo recurso -->
             <Button Text="Agregar Recurso"
+                    Command="{Binding AgregarRecursoCommand}"
                     BackgroundColor="#b39ddb"
                     TextColor="Black"
                     HeightRequest="50"
                     FontSize="18"
                     CornerRadius="15"
-                    Clicked="OnAddResourceButtonClicked"/>
+                    IsVisible="{Binding IsNotStudent}"/>
 
-            <!-- Botón para editar / eliminar favoritos -->
-            <Button Text="Modificar / Eliminar Favoritos"
+            <!-- Botón para editar / eliminar recursos -->
+            <Button Text="Modificar / Eliminar Recursos"
+                    Command="{Binding EditarRecursosCommand}"
                     BackgroundColor="#9575cd"
                     TextColor="White"
                     HeightRequest="50"
                     FontSize="18"
                     CornerRadius="15"
-                    Clicked="OnEditFavoritesButtonClicked"/>
+                    IsVisible="{Binding IsNotStudent}"/>
         </VerticalStackLayout>
     </ScrollView>
     

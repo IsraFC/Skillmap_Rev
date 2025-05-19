@@ -31,8 +31,9 @@
                            FontSize="14"
                            FontAttributes="Bold"/>
                     <Picker ItemsSource="{Binding Recursos}"
+                            SelectedItem="{Binding RecursoSeleccionado}"
+                            ItemDisplayBinding="{Binding Title}"
                             Title="Selecciona un recurso"
-                            SelectedIndexChanged="OnRecursoSeleccionado"
                             BackgroundColor="#eeeeee"
                             TextColor="Black"/>
 
@@ -96,7 +97,6 @@
                                 TextColor="White"
                                 FontAttributes="Bold"
                                 CornerRadius="10"
-                                Clicked="OnActualizarRecursoClicked"
                                 HeightRequest="45"/>
 
                         <Button Text="🗑️ Eliminar"
@@ -105,7 +105,6 @@
                                 TextColor="White"
                                 FontAttributes="Bold"
                                 CornerRadius="10"
-                                Clicked="OnEliminarRecursoClicked"
                                 HeightRequest="45"/>
                     </HorizontalStackLayout>
 

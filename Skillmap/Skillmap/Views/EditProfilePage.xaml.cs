@@ -2,14 +2,18 @@ namespace Skillmap.Views;
 
 public partial class EditProfilePage : ContentPage
 {
-	public EditProfilePage()
+    public EditProfilePage()
 	{
 		InitializeComponent();
 	}
 
-    private async void OnSaveClicked(object sender, EventArgs e)
+    protected override void OnAppearing()
     {
-		await DisplayAlert("Perfil Actualizado", "Tu perfil se ha actualizado correctamente", "Ok");
-		await Navigation.PopAsync();
+        base.OnAppearing();
+
+        if (BindingContext is ViewModels.EditProfileViewModel vm)
+        {
+            vm.CargarDatosCommand.Execute(null);
+        }
     }
 }

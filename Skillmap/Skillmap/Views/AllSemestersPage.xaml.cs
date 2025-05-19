@@ -10,7 +10,6 @@ namespace Skillmap.Views
         private readonly AllSemestersViewModel _viewModel;
 
         private bool isNotStudent;
-
         public bool IsNotStudent { get => isNotStudent; set => isNotStudent = value; }
 
         public AllSemestersPage(List<SemesterItem> semesters)
@@ -19,6 +18,12 @@ namespace Skillmap.Views
             var httpService = (HttpService)App.Current.Handler.MauiContext.Services.GetService(typeof(HttpService));
             _viewModel = new AllSemestersViewModel(httpService);
             BindingContext = _viewModel;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.CargarSemestresCommand.Execute(null);
         }
 
         private async void OnSemesterSelected(object sender, SelectionChangedEventArgs e)
@@ -37,7 +42,7 @@ namespace Skillmap.Views
 
         private async void OnEditarMateriaClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new EditarMateriaPage());
+            await Navigation.PushAsync(new EditSubjectPage());
         }
     }
 }

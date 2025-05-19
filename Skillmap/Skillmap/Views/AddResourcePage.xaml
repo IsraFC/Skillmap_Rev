@@ -54,7 +54,10 @@
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
                         <VerticalStackLayout Grid.Column="0">
                             <Label Text="Tipo de Recurso *" FontSize="14" FontAttributes="Bold"/>
+                            <!-- Picker de Tipo -->
                             <Picker SelectedItem="{Binding TipoSeleccionado}"
+                                    ItemsSource="{Binding Tipos}"
+                                    ItemDisplayBinding="{Binding Id_Resource_Type}"
                                     Title="Seleccionar tipo..."
                                     BackgroundColor="#eeeeee"
                                     TextColor="Black"/>
@@ -63,6 +66,8 @@
                         <VerticalStackLayout Grid.Column="1">
                             <Label Text="Materia Asociada *" FontSize="14" FontAttributes="Bold"/>
                             <Picker SelectedItem="{Binding MateriaSeleccionada}"
+                                    ItemsSource="{Binding Materias}"
+                                    ItemDisplayBinding="{Binding Name}"
                                     Title="Seleccionar materia..."
                                     BackgroundColor="#eeeeee"
                                     TextColor="Black"/>

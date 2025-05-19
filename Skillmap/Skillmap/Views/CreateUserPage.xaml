@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
+             x:Class="Skillmap.Views.CreateUserPage"
+             Title="Crear Usuario"
+             BackgroundColor="#ECECEC"
+             Shell.TabBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:CreateUserViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15" HorizontalOptions="Center">
+
+            <Label Text="Nuevo Usuario" FontSize="24" FontAttributes="Bold" TextColor="Black" />
+
+            <Entry Placeholder="Nombre" Text="{Binding Name}" WidthRequest="280" BackgroundColor="White" TextColor="Black"/>
+            <Entry Placeholder="Apellido Paterno" Text="{Binding Father_LastName}" WidthRequest="280" BackgroundColor="White" TextColor="Black"/>
+            <Entry Placeholder="Apellido Materno" Text="{Binding Mother_LastName}" WidthRequest="280" BackgroundColor="White" TextColor="Black"/>
+            <Entry Placeholder="Correo (Username)" Text="{Binding UserName}" WidthRequest="280" BackgroundColor="White" Keyboard="Email" TextColor="Black"/>
+            <Entry Placeholder="Contraseña" Text="{Binding Password}" IsPassword="True" WidthRequest="280" BackgroundColor="White" TextColor="Black"/>
+
+            <Picker ItemsSource="{Binding RolesDisponibles}"
+                    SelectedItem="{Binding Role}"
+                    Title="Seleccionar rol"
+                    WidthRequest="280"
+                    BackgroundColor="White"
+                    TextColor="Black"/>
+
+            <Button Text="Crear Usuario"
+                    Command="{Binding CrearUsuarioCommand}"
+                    BackgroundColor="#0b8043"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    WidthRequest="250"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

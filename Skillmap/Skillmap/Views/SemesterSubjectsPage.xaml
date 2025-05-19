@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
              x:Class="Skillmap.Views.SemesterSubjectsPage"
+             x:Name="SemesterSubjectsPageRef"
              Title="Materias del Semestre"
              BackgroundColor="White"
              Shell.TabBarIsVisible="False">
 
+    <ContentPage.BindingContext>
+        <viewmodels:SemesterSubjectsViewModel />
+    </ContentPage.BindingContext>
+
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="10">
 
-            <Label x:Name="SemesterTitle"
+            <Label Text="{Binding NombreSemestre}"
                    FontSize="24"
                    FontAttributes="Bold"
                    TextColor="Black"
                    HorizontalOptions="Center"/>
 
-            <CollectionView x:Name="subjectsCollectionView"
+            <CollectionView ItemsSource="{Binding Materias}"
                             SelectionMode="Single"
-                            SelectionChanged="OnSubjectSelected">
+                            SelectionChanged="OnSelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border BackgroundColor="White"

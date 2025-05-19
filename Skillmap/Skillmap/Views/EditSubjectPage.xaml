@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Skillmap.Views.EditarMateriaPage"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
+             x:Class="Skillmap.Views.EditSubjectPage"
              Title="Modificar o Eliminar Materia"
              BackgroundColor="#f8f9fa"
              Shell.TabBarIsVisible="False">
 
+    <ContentPage.BindingContext>
+        <viewmodels:EditSubjectViewModel />
+    </ContentPage.BindingContext>
+    
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
@@ -16,65 +21,59 @@
                    HorizontalOptions="Center"/>
 
             <!-- Picker para seleccionar materia existente -->
-            <Picker x:Name="MateriaPicker"
-                    Title="Seleccionar materia"
+            <Picker Title="Seleccionar materia"
+                    ItemsSource="{Binding Materias}"
+                    SelectedItem="{Binding MateriaSeleccionada}"
+                    ItemDisplayBinding="{Binding Name}"
                     FontSize="16"
-                    SelectedIndexChanged="OnMateriaSelected"
                     BackgroundColor="#cdcdcd"
                     TextColor="Black"/>
 
             <!-- Campos para editar -->
-            <Entry x:Name="NombreEntry"
-                   Placeholder="Nombre de la materia"
+            <Entry Placeholder="Nombre de la materia"
+                   Text="{Binding Nombre}"
                    FontSize="16"
-                   TextColor="Black"/>
+                   TextColor="Black"
+                   IsEnabled="{Binding PuedeEditar}"/>
 
-            <Picker x:Name="SemestrePicker"
-                    Title="Seleccionar semestre"
+            <Picker Title="Seleccionar semestre"
+                    ItemsSource="{Binding Semestres}"
+                    SelectedItem="{Binding SemestreSeleccionado}"
                     FontSize="16"
                     BackgroundColor="#cdcdcd"
-                    TextColor="Black">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>1° Semestre</x:String>
-                        <x:String>2° Semestre</x:String>
-                        <x:String>3° Semestre</x:String>
-                        <x:String>4° Semestre</x:String>
-                        <x:String>5° Semestre</x:String>
-                        <x:String>6° Semestre</x:String>
-                        <x:String>7° Semestre</x:String>
-                        <x:String>8° Semestre</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+                    TextColor="Black"
+                    IsEnabled="{Binding PuedeEditar}"/>
 
-            <Picker x:Name="DocentePicker"
-                    Title="Seleccionar docente"
+            <Picker Title="Seleccionar docente"
+                    ItemsSource="{Binding Docentes}"
+                    SelectedItem="{Binding DocenteSeleccionado}"
+                    ItemDisplayBinding="{Binding NombreCompleto}"
                     FontSize="16"
                     BackgroundColor="#cdcdcd"
-                    TextColor="Black"/>
+                    TextColor="Black"
+                    IsEnabled="{Binding PuedeEditar}"/>
 
             <HorizontalStackLayout>
-                <CheckBox x:Name="HabilitadoCheckBox" IsChecked="True"/>
+                <CheckBox IsChecked="{Binding Habilitado}" IsEnabled="{Binding PuedeEditar}" />
                 <Label Text="Materia habilitada para uso" TextColor="Black" VerticalOptions="Center"/>
             </HorizontalStackLayout>
 
             <!-- Botones -->
             <Button Text="Actualizar Materia"
-                    x:Name="ActualizarButton"
-                    Clicked="OnActualizarMateriaClicked"
+                    Command="{Binding ActualizarCommand}"
                     BackgroundColor="#0b8043"
                     TextColor="White"
                     FontAttributes="Bold"
-                    CornerRadius="10"/>
+                    CornerRadius="10"
+                    IsEnabled="{Binding PuedeEditar}"/>
 
             <Button Text="Eliminar Materia"
-                    Clicked="OnEliminarMateriaClicked"
-                    x:Name="EliminarButton"
+                    Command="{Binding EliminarCommand}"
                     BackgroundColor="#e53935"
                     TextColor="White"
                     FontAttributes="Bold"
-                    CornerRadius="10"/>
+                    CornerRadius="10"
+                    IsEnabled="{Binding PuedeEditar}"/>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

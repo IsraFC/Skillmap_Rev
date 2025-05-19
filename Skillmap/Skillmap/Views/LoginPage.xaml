@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
              x:Class="Skillmap.Views.LoginPage"
+             x:Name="LoginPageRef"
              Title="Iniciar Sesión"
              BackgroundColor="#ECECEC"
              Shell.TabBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:LoginViewModel />
+    </ContentPage.BindingContext>
 
     <Grid Padding="20">
         <Grid.RowDefinitions>
@@ -41,48 +47,32 @@
                    HorizontalOptions="Center" Margin="0,10,0,0"/>
 
             <Border StrokeShape="RoundRectangle 10" Stroke="Gray" StrokeThickness="1">
-                <Entry x:Name="emailEntry" Placeholder="Correo Electrónico"
-                       BackgroundColor="White" TextColor="Black"
-                       WidthRequest="250" Keyboard="Email"
-                       Margin="5"
-                       Text="admin@mail.com"/>
+                <Entry Placeholder="Correo Electrónico"
+                       Text="{Binding Email}"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       WidthRequest="250"
+                       Keyboard="Email"
+                       Margin="5"/>
             </Border>
 
             <Border StrokeShape="RoundRectangle 10" Stroke="Gray" StrokeThickness="1">
-                <Entry x:Name="passwordEntry" Placeholder="Contraseña"
-                       BackgroundColor="White" TextColor="Black"
-                       WidthRequest="250" IsPassword="True"
-                       Margin="5"
-                       Text="Adm1234#"/>
+                <Entry Placeholder="Contraseña"
+                       Text="{Binding Password}"
+                       IsPassword="True"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       WidthRequest="250"
+                       Margin="5"/>
             </Border>
 
             <Button Text="Ingresar"
+                    Command="{Binding LoginCommand}"
                     BackgroundColor="#e91d1d"
                     TextColor="White"
-                    Clicked="OnLoginClicked"
                     CornerRadius="20"
                     HeightRequest="45"
                     WidthRequest="250"/>
-
-            <Button Text="Registrarse"
-                    BackgroundColor="Gray"
-                    TextColor="White"
-                    Clicked="OnRegisterClicked"
-                    CornerRadius="20"
-                    HeightRequest="45"
-                    WidthRequest="250"/>
-
-            <!-- 🔹 Opción de "¿Olvidaste tu contraseña?" con GestureRecognizer -->
-            <Label Text="¿Olvidaste tu contraseña?"
-                   FontSize="14"
-                   TextColor="Blue"
-                   HorizontalOptions="Center"
-                   Padding="10">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnForgotPasswordTapped"/>
-                </Label.GestureRecognizers>
-            </Label>
-
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

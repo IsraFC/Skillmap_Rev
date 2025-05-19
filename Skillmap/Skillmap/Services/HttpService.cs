@@ -42,11 +42,11 @@ namespace Skillmap.Services
 
                         await SecureStorage.SetAsync("accessToken", _authorizationKey);
 
-                        var user = await GetCurrentUser();
+                        var user = await GetCurrentUserInfo();
                         if (user != null)
                         {
                             await SecureStorage.SetAsync("userName", user.UserName);
-                            await SecureStorage.SetAsync("userRole", user.Role);
+                            await SecureStorage.SetAsync("userRole", user.Rol);
                         }
                     }
                 }
@@ -85,6 +85,27 @@ namespace Skillmap.Services
                 Console.WriteLine($"Error en GetCurrentUser: {ex.Message}");
                 return null;
             }
+        }
+
+        // OBTENER USUARIO CON ROL
+        public async Task<UserWithRoleOutputDTO?> GetCurrentUserInfo()
+        {
+            return await _client.GetFromJsonAsync<UserWithRoleOutputDTO>("api/User/me");
+        }
+
+        public async Task<HttpResponseMessage> PostAsJson(string url, object data)
+        {
+            return await _client.PostAsJsonAsync(url, data);
+        }
+
+        public async Task<HttpResponseMessage> UpdateUser(UpdateUserDTO user)
+        {
+            return await _client.PutAsJsonAsync("api/User", user, _serializerOptions);
+        }
+
+        public async Task<HttpResponseMessage> DeleteUser(string username)
+        {
+            return await _client.DeleteAsync($"api/User/{username}");
         }
 
         // OBTENER USUARIOS
@@ -296,7 +317,15 @@ namespace Skillmap.Services
                     _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authorizationKey);
                     _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 }
+
             }
+        }
+
+        // Limpiar sesión
+        public void ResetAuthorization()
+        {
+            _authorizationKey = null;
+            _client.DefaultRequestHeaders.Authorization = null;
         }
     }
 }
