@@ -11,7 +11,7 @@ using SkillmapApi.Data;
 namespace SkillmapApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250518231007_Initial")]
+    [Migration("20250519014706_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

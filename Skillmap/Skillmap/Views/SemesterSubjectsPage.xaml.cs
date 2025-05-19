@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Skillmap.Models;
+using SkillmapLib1.Models;
 using Skillmap.Services;
 using SkillmapLib1.Models.DTO.OutputDTO;
 

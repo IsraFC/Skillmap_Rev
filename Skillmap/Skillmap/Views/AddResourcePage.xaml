@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Skillmap.Views.CrearRecursoPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Skillmap.Views.AddResourcePage"
              Title="Nuevo Recurso Educativo"
              BackgroundColor="#f2f2f2"
              Shell.TabBarIsVisible="False">
@@ -27,14 +28,14 @@
                 <VerticalStackLayout Spacing="20">
 
                     <!-- Título -->
-                    <Entry x:Name="TituloEntry"
+                    <Entry Text="{Binding Titulo}"
                            Placeholder="Título del recurso *"
                            FontSize="16"
                            BackgroundColor="#eeeeee"
                            TextColor="Black" />
 
                     <!-- Descripción -->
-                    <Editor x:Name="DescripcionEditor"
+                    <Editor Text="{Binding Descripcion}"
                             Placeholder="Descripción del recurso *"
                             FontSize="16"
                             AutoSize="TextChanges"
@@ -43,7 +44,7 @@
                             TextColor="Black"/>
 
                     <!-- Link / Archivo -->
-                    <Entry x:Name="RutaArchivoEntry"
+                    <Entry Text="{Binding Link}"
                            Placeholder="Enlace o ruta del recurso *"
                            FontSize="16"
                            BackgroundColor="#eeeeee"
@@ -53,7 +54,7 @@
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
                         <VerticalStackLayout Grid.Column="0">
                             <Label Text="Tipo de Recurso *" FontSize="14" FontAttributes="Bold"/>
-                            <Picker x:Name="TipoRecursoPicker"
+                            <Picker SelectedItem="{Binding TipoSeleccionado}"
                                     Title="Seleccionar tipo..."
                                     BackgroundColor="#eeeeee"
                                     TextColor="Black"/>
@@ -61,7 +62,7 @@
 
                         <VerticalStackLayout Grid.Column="1">
                             <Label Text="Materia Asociada *" FontSize="14" FontAttributes="Bold"/>
-                            <Picker x:Name="MateriaPicker"
+                            <Picker SelectedItem="{Binding MateriaSeleccionada}"
                                     Title="Seleccionar materia..."
                                     BackgroundColor="#eeeeee"
                                     TextColor="Black"/>
@@ -70,13 +71,13 @@
 
                     <!-- Público -->
                     <HorizontalStackLayout>
-                        <CheckBox x:Name="EsPublicoCheckBox" IsChecked="True"/>
+                        <CheckBox IsChecked="{Binding EsPublico}"/>
                         <Label Text="Hacer recurso público" TextColor="Black" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
 
                     <!-- Botón -->
                     <Button Text="💾 Guardar Recurso"
-                            Clicked="OnGuardarClicked"
+                            Command="{Binding GuardarRecursoCommand}"
                             BackgroundColor="#0b8043"
                             TextColor="White"
                             FontAttributes="Bold"

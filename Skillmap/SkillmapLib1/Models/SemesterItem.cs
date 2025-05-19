@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SkillmapLib1.Models.DTO.OutputDTO;
 
-namespace Skillmap.Models
+namespace SkillmapLib1.Models
 {
     public class SemesterItem
     {

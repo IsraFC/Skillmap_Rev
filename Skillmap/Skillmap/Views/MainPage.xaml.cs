@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls; // Importa los controles de .NET MAUI
-using Skillmap.Models;
+using SkillmapLib1.Models;
 using Skillmap.Services;
 using SkillmapLib1.Models;
 using SkillmapLib1.Models.DTO.OutputDTO;

@@ -1,11 +1,14 @@
 using System.Threading.Tasks;
-using Skillmap.Models;
+using SkillmapLib1.Models;
 using Skillmap.Services;
+using Skillmap.ViewModels;
 
 namespace Skillmap.Views
 {
     public partial class AllSemestersPage : ContentPage
     {
+        private readonly AllSemestersViewModel _viewModel;
+
         private bool isNotStudent;
 
         public bool IsNotStudent { get => isNotStudent; set => isNotStudent = value; }
@@ -13,58 +16,23 @@ namespace Skillmap.Views
         public AllSemestersPage(List<SemesterItem> semesters)
         {
             InitializeComponent();
-            semestersCollectionView.ItemsSource = semesters;
-            CheckUserRole();
-        }
-
-        private async void CheckUserRole()
-        {
-            string userRole = await SecureStorage.GetAsync("userRole");
-            AddSubjectButton.IsVisible = userRole == "Teacher" || userRole == "Admin";
+            var httpService = (HttpService)App.Current.Handler.MauiContext.Services.GetService(typeof(HttpService));
+            _viewModel = new AllSemestersViewModel(httpService);
+            BindingContext = _viewModel;
         }
 
         private async void OnSemesterSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.CurrentSelection.Count == 0)
-                return;
-
-            var selectedSemester = (SemesterItem)e.CurrentSelection.FirstOrDefault();
-            await Navigation.PushAsync(new SemesterSubjectsPage(selectedSemester));
-
-            // Limpiar la selección
-            ((CollectionView)sender).SelectedItem = null;
+            if (e.CurrentSelection.FirstOrDefault() is SemesterItem selected)
+            {
+                await Navigation.PushAsync(new SemesterSubjectsPage(selected));
+                ((CollectionView)sender).SelectedItem = null;
+            }
         }
 
         private async void OnAgregarMateriaClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new CrearMateriaPage());
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-
-            try
-            {
-                var httpService = (HttpService)App.Current.Handler.MauiContext.Services.GetService(typeof(HttpService));
-                var subjects = await httpService.GetSubjects();
-
-                var grouped = subjects
-                    .OrderBy(s => int.Parse(s.Semester.Split('°')[0]))
-                    .GroupBy(s => s.Semester)
-                    .Select(g => new SemesterItem
-                    {
-                        Name = g.Key,
-                        Subjects = g.ToList()
-                    })
-                    .ToList();
-
-                semestersCollectionView.ItemsSource = grouped;
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"No se pudieron cargar los semestres: {ex.Message}", "OK");
-            }
+            await Navigation.PushAsync(new AddSubjectPage());
         }
 
         private async void OnEditarMateriaClicked(object sender, EventArgs e)

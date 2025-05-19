@@ -58,17 +58,11 @@
 
 	<ItemGroup>
 	  <AndroidResource Remove="Views\Views\**" />
-	  <AndroidResource Remove="ViewModels\**" />
 	  <Compile Remove="Views\Views\**" />
-	  <Compile Remove="ViewModels\**" />
 	  <EmbeddedResource Remove="Views\Views\**" />
-	  <EmbeddedResource Remove="ViewModels\**" />
 	  <MauiCss Remove="Views\Views\**" />
-	  <MauiCss Remove="ViewModels\**" />
 	  <MauiXaml Remove="Views\Views\**" />
-	  <MauiXaml Remove="ViewModels\**" />
 	  <None Remove="Views\Views\**" />
-	  <None Remove="ViewModels\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -87,16 +81,16 @@
 	  <MauiXaml Update="Views\AllSemestersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\CrearMateriaPage.xaml">
+	  <MauiXaml Update="Views\AddSubjectPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\CrearRecursoPage.xaml">
+	  <MauiXaml Update="Views\AddResourcePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\EditarMateriaPage.xaml">
+	  <MauiXaml Update="Views\EditSubjectPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\EditarRecursoPage.xaml">
+	  <MauiXaml Update="Views\EditResourcePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\EditProfilePage.xaml">
@@ -141,6 +135,18 @@
 	<ItemGroup>
 	  <Compile Update="Views\AllSemestersPage.xaml.cs">
 	    <DependentUpon>AllSemestersPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\AddSubjectPage.xaml.cs">
+	    <DependentUpon>AddSubjectPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\AddResourcePage.xaml.cs">
+	    <DependentUpon>AddResourcePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\EditResourcePage.xaml.cs">
+	    <DependentUpon>EditResourcePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\EditSubjectPage.xaml.cs">
+	    <DependentUpon>EditSubjectPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\UsuariosPage.xaml.cs">
 	    <DependentUpon>UsuariosPage.xaml</DependentUpon>

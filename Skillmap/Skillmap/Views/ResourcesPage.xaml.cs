@@ -63,11 +63,11 @@ public partial class ResourcesPage : ContentPage
 
     private async void OnAddResourceButtonClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new CrearRecursoPage());
+        await Navigation.PushAsync(new AddResourcePage());
     }
 
     private async void OnEditFavoritesButtonClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new EditarRecursoPage());
+        await Navigation.PushAsync(new EditResourcePage());
     }
 }

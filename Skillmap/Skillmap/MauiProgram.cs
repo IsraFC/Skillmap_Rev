@@ -39,7 +39,7 @@ namespace Skillmap
             builder.Services
                 .AddTransient<LoginPage>()
                 .AddTransient<MainPage>()
-                .AddTransient<CrearMateriaPage>();
+                .AddTransient<AddSubjectPage>();
 
 
 #if DEBUG

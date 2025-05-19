@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Skillmap.Views.CrearMateriaPage"
+             xmlns:vm="clr-namespace:Skillmap.ViewModels"
+             x:Class="Skillmap.Views.AddSubjectPage"
              BackgroundColor="#f8f9fa"
              Title="Registrar Nueva Materia"
              Shell.TabBarIsVisible="False">
 
+    <ContentPage.BindingContext>
+        <vm:AddSubjectViewModel/>
+    </ContentPage.BindingContext>
+    
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
@@ -15,43 +20,34 @@
                    TextColor="#0b8043"
                    HorizontalOptions="Center"/>
 
-            <Entry x:Name="NombreEntry"
+            <Entry Text="{Binding NombreMateria}"
                    Placeholder="Nombre de la materia"
                    FontSize="16"
                    TextColor="Black"/>
 
-            <Picker x:Name="SemestrePicker"
-                    Title="Seleccionar semestre"
+            <Picker Title="Seleccionar semestre"
                     FontSize="16"
                     BackgroundColor="#cdcdcd"
-                    TextColor="Black">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>1° Semestre</x:String>
-                        <x:String>2° Semestre</x:String>
-                        <x:String>3° Semestre</x:String>
-                        <x:String>4° Semestre</x:String>
-                        <x:String>5° Semestre</x:String>
-                        <x:String>6° Semestre</x:String>
-                        <x:String>7° Semestre</x:String>
-                        <x:String>8° Semestre</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
+                    TextColor="Black"
+                    ItemsSource="{Binding Semestres}"
+                    SelectedItem="{Binding SemestreSeleccionado}">
             </Picker>
 
-            <Picker x:Name="DocentePicker"
+            <Picker ItemsSource="{Binding Docentes}"
                     Title="Seleccionar docente"
                     FontSize="16"
                     BackgroundColor="#cdcdcd"
-                    TextColor="Black"/>
+                    TextColor="Black"
+                    SelectedItem="{Binding DocenteSeleccionado}"
+                    ItemDisplayBinding="{Binding NombreCompleto}"/>
 
             <HorizontalStackLayout>
-                <CheckBox x:Name="HabilitadoCheckBox" IsChecked="True"/>
+                <CheckBox IsChecked="{Binding EstaHabilitada}"/>
                 <Label Text="Materia habilitada para uso" TextColor="Black" VerticalOptions="Center"/>
             </HorizontalStackLayout>
 
             <Button Text="Registrar Materia"
-                    Clicked="OnRegistrarMateriaClicked"
+                    Command="{Binding RegistrarCommand}"
                     BackgroundColor="#0b8043"
                     TextColor="White"
                     CornerRadius="10"

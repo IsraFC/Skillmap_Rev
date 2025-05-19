@@ -45,7 +45,7 @@
                        BackgroundColor="White" TextColor="Black"
                        WidthRequest="250" Keyboard="Email"
                        Margin="5"
-                       Text="studentIsra@gmail.com"/>
+                       Text="admin@mail.com"/>
             </Border>
 
             <Border StrokeShape="RoundRectangle 10" Stroke="Gray" StrokeThickness="1">
@@ -53,7 +53,7 @@
                        BackgroundColor="White" TextColor="Black"
                        WidthRequest="250" IsPassword="True"
                        Margin="5"
-                       Text="Std1234#"/>
+                       Text="Adm1234#"/>
             </Border>
 
             <Button Text="Ingresar"

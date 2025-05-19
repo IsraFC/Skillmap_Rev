@@ -13,7 +13,7 @@
                    TextColor="Black"
                    HorizontalOptions="Center"/>
 
-            <CollectionView x:Name="semestersCollectionView" SelectionMode="Single"
+            <CollectionView ItemsSource="{Binding Semestres}" x:Name="semestersCollectionView" SelectionMode="Single"
                             SelectionChanged="OnSemesterSelected">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -34,7 +34,7 @@
                     HeightRequest="50"
                     FontSize="18"
                     CornerRadius="15"
-                    x:Name="AddSubjectButton"/>
+                    IsVisible="{Binding IsNotStudent}"/>
             
             <Button Text="Modificar / Eliminar materia"
                     Clicked="OnEditarMateriaClicked"
@@ -42,7 +42,8 @@
                     TextColor="White"
                     HeightRequest="50"
                     FontSize="18"
-                    CornerRadius="15"/>
+                    CornerRadius="15"
+                    IsVisible="{Binding IsNotStudent}"/>
             
         </VerticalStackLayout>
     </ScrollView>
