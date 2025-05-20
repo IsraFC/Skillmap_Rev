@@ -8,16 +8,42 @@ using System.Collections.ObjectModel;
 
 namespace Skillmap.ViewModels
 {
+    /// <summary>
+    /// ViewModel encargado de editar o eliminar recursos educativos.
+    /// Permite modificar el contenido y la asociación de un recurso a una materia.
+    /// </summary>
     public partial class EditResourceViewModel : ObservableObject
     {
         private readonly HttpService _httpService;
 
+        /// <summary>
+        /// Lista de todos los recursos disponibles.
+        /// </summary>
         [ObservableProperty] private ObservableCollection<ResourcesItem> recursos;
+
+        /// <summary>
+        /// Lista de tipos de recurso disponibles.
+        /// </summary>
         [ObservableProperty] private ObservableCollection<ResourceType> tipos;
+
+        /// <summary>
+        /// Lista de materias disponibles para vincular recursos.
+        /// </summary>
         [ObservableProperty] private ObservableCollection<SubjectOutputDTO> materias;
 
+        /// <summary>
+        /// Recurso actualmente seleccionado para editar.
+        /// </summary>
         [ObservableProperty] private ResourcesItem recursoSeleccionado;
+
+        /// <summary>
+        /// Tipo de recurso seleccionado (PDF, video, enlace, etc.).
+        /// </summary>
         [ObservableProperty] private ResourceType tipoSeleccionado;
+
+        /// <summary>
+        /// Materia a la que se vinculará el recurso.
+        /// </summary>
         [ObservableProperty] private SubjectOutputDTO materiaSeleccionada;
 
         [ObservableProperty] private string titulo;
@@ -27,12 +53,19 @@ namespace Skillmap.ViewModels
 
         private List<SubjectResource> subjectResources = new();
 
+        /// <summary>
+        /// Constructor que recibe el servicio HTTP y carga los datos necesarios.
+        /// </summary>
+        /// <param name="httpService">Instancia del servicio HTTP inyectado.</param>
         public EditResourceViewModel(HttpService httpService)
         {
             _httpService = httpService;
             CargarDatos();
         }
 
+        /// <summary>
+        /// Carga los recursos, tipos, materias y relaciones entre recursos y materias desde la API.
+        /// </summary>
         private async void CargarDatos()
         {
             Recursos = new(await _httpService.GetResources());
@@ -41,9 +74,15 @@ namespace Skillmap.ViewModels
             subjectResources = await _httpService.GetAllSubjectResources();
         }
 
+        /// <summary>
+        /// Evento que se dispara al cambiar el recurso seleccionado.
+        /// Rellena los campos de edición con la información correspondiente.
+        /// </summary>
+        /// <param name="value">Nuevo recurso seleccionado.</param>
         partial void OnRecursoSeleccionadoChanged(ResourcesItem value)
         {
             if (value == null) return;
+
             Titulo = value.Title;
             Descripcion = value.Description;
             Link = value.Link;
@@ -53,9 +92,12 @@ namespace Skillmap.ViewModels
             var relacion = subjectResources.FirstOrDefault(sr => sr.ID_Resource == value.Id);
             MateriaSeleccionada = relacion != null
                 ? Materias.FirstOrDefault(m => m.Id_Subject == relacion.ID_Subject)
-            : null;
+                : null;
         }
 
+        /// <summary>
+        /// Comando que actualiza un recurso educativo y su relación con la materia.
+        /// </summary>
         [RelayCommand]
         private async Task Actualizar()
         {
@@ -94,6 +136,10 @@ namespace Skillmap.ViewModels
             }
         }
 
+        /// <summary>
+        /// Comando que elimina un recurso seleccionado y su relación con la materia.
+        /// Solicita confirmación antes de realizar la operación.
+        /// </summary>
         [RelayCommand]
         private async Task Eliminar()
         {

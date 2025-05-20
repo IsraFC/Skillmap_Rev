@@ -8,13 +8,36 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Skillmap.ViewModels
 {
+    /// <summary>
+    /// ViewModel para mostrar los detalles de un recurso educativo seleccionado.
+    /// Permite visualizar su título, descripción, fecha y enlace, así como abrir el recurso en el navegador.
+    /// </summary>
     public partial class ResourcesDetailViewModel : ObservableObject
     {
+        /// <summary>
+        /// Título del recurso educativo.
+        /// </summary>
         [ObservableProperty] private string titulo = string.Empty;
+
+        /// <summary>
+        /// Descripción del recurso.
+        /// </summary>
         [ObservableProperty] private string descripcion = string.Empty;
+
+        /// <summary>
+        /// Fecha en la que fue subido el recurso.
+        /// </summary>
         [ObservableProperty] private string fechaSubida = string.Empty;
+
+        /// <summary>
+        /// Enlace al recurso (URL).
+        /// </summary>
         [ObservableProperty] private string link = string.Empty;
 
+        /// <summary>
+        /// Comando para abrir el enlace del recurso en el navegador del dispositivo.
+        /// Si no hay enlace disponible o si ocurre un error, se muestra un mensaje de alerta.
+        /// </summary>
         [RelayCommand]
         private async Task AbrirLink()
         {

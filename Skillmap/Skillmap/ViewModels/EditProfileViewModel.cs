@@ -3,15 +3,24 @@ using CommunityToolkit.Mvvm.Input;
 using Skillmap.Services;
 using SkillmapLib1.Models.DTO.OutputDTO;
 using System.Collections.ObjectModel;
-using System.Net.Http.Json;
 
 namespace Skillmap.ViewModels
 {
+    /// <summary>
+    /// ViewModel que permite la edición, carga y eliminación de perfiles de usuario.
+    /// Su comportamiento se adapta según si el usuario es administrador o no.
+    /// </summary>
     public partial class EditProfileViewModel : ObservableObject
     {
+        /// <summary>
+        /// Lista de usuarios disponibles. Visible solo para administradores.
+        /// </summary>
         [ObservableProperty]
         private ObservableCollection<UserWithRoleOutputDTO> usuariosDisponibles = new();
 
+        /// <summary>
+        /// Usuario actualmente seleccionado para editar.
+        /// </summary>
         [ObservableProperty]
         private UserWithRoleOutputDTO usuarioSeleccionado;
 
@@ -27,15 +36,30 @@ namespace Skillmap.ViewModels
         [ObservableProperty] private string mother_LastName = string.Empty;
         [ObservableProperty] private string rol = string.Empty;
 
-        [ObservableProperty] private ObservableCollection<string> rolesDisponibles = new() { "Admin", "Teacher", "Student" };
+        /// <summary>
+        /// Lista de roles disponibles que pueden asignarse al usuario.
+        /// </summary>
+        [ObservableProperty]
+        private ObservableCollection<string> rolesDisponibles = new() { "Admin", "Teacher", "Student" };
 
-        [ObservableProperty] private bool esAdmin;
+        /// <summary>
+        /// Indica si el usuario actual tiene rol de administrador.
+        /// </summary>
+        [ObservableProperty]
+        private bool esAdmin;
 
+        /// <summary>
+        /// Constructor que inicializa el ViewModel con el servicio HTTP.
+        /// </summary>
         public EditProfileViewModel()
         {
             _httpService = (HttpService)App.Current.Handler.MauiContext.Services.GetService(typeof(HttpService));
         }
 
+        /// <summary>
+        /// Guarda los cambios realizados al usuario seleccionado.
+        /// También actualiza la sesión si el usuario modificado es el logueado.
+        /// </summary>
         [RelayCommand]
         private async Task GuardarCambios()
         {
@@ -56,7 +80,6 @@ namespace Skillmap.ViewModels
 
             if (response.IsSuccessStatusCode)
             {
-                // Si el usuario logueado fue editado, actualizamos SecureStorage
                 if (UsuarioSeleccionado.UserName == usuarioLogueado)
                 {
                     await SecureStorage.SetAsync("userName", actualizado.UserName);
@@ -64,7 +87,6 @@ namespace Skillmap.ViewModels
                 }
 
                 await App.Current.MainPage.DisplayAlert("Éxito", "Perfil actualizado correctamente", "OK");
-
                 await CargarDatos();
             }
             else
@@ -73,6 +95,9 @@ namespace Skillmap.ViewModels
             }
         }
 
+        /// <summary>
+        /// Carga los datos del usuario actual o todos los usuarios si el rol es administrador.
+        /// </summary>
         [RelayCommand]
         public async Task CargarDatos()
         {
@@ -86,16 +111,13 @@ namespace Skillmap.ViewModels
             {
                 var lista = await _httpService.GetAllUsers();
 
-                // Asegura que no haya valores nulos antes de asignar
                 if (lista is not null && lista.Any())
                 {
                     UsuariosDisponibles.Clear();
                     foreach (var u in lista)
                         UsuariosDisponibles.Add(u);
 
-                    // Si el usuario anterior aún existe en la nueva lista, lo seleccionamos
                     var user = UsuariosDisponibles.FirstOrDefault(u => u.UserName == userToRestore);
-
                     UsuarioSeleccionado = user ?? UsuariosDisponibles.FirstOrDefault();
                 }
                 else
@@ -118,11 +140,19 @@ namespace Skillmap.ViewModels
             AplicarDatosUsuario();
         }
 
+        /// <summary>
+        /// Método disparado automáticamente al cambiar el usuario seleccionado.
+        /// Rellena las propiedades del formulario con los datos del usuario.
+        /// </summary>
+        /// <param name="value">Nuevo usuario seleccionado.</param>
         partial void OnUsuarioSeleccionadoChanged(UserWithRoleOutputDTO value)
         {
             AplicarDatosUsuario();
         }
 
+        /// <summary>
+        /// Asigna los datos del usuario seleccionado a las propiedades editables.
+        /// </summary>
         private void AplicarDatosUsuario()
         {
             if (UsuarioSeleccionado == null) return;
@@ -135,6 +165,10 @@ namespace Skillmap.ViewModels
             Rol = UsuarioSeleccionado.Rol;
         }
 
+        /// <summary>
+        /// Elimina el usuario seleccionado tras una confirmación.
+        /// Si es el usuario actual, cierra la sesión.
+        /// </summary>
         [RelayCommand]
         private async Task EliminarUsuario()
         {
@@ -148,7 +182,6 @@ namespace Skillmap.ViewModels
             {
                 await App.Current.MainPage.DisplayAlert("Éxito", "Usuario eliminado", "OK");
 
-                // Si se eliminó el usuario logueado, cerrar sesión
                 if (UsuarioSeleccionado.UserName == usuarioLogueado)
                 {
                     var loginPage = App.Current.Handler.MauiContext.Services.GetRequiredService<Views.LoginPage>();
@@ -156,10 +189,8 @@ namespace Skillmap.ViewModels
                 }
                 else
                 {
-                    await CargarDatos(); // Recargar lista
+                    await CargarDatos();
 
-                    //limpiar la selección si ya no existe
-                    // Validación para evitar excepción
                     if (!UsuariosDisponibles.Any(u => u.UserName == UsuarioSeleccionado?.UserName))
                     {
                         UsuarioSeleccionado = UsuariosDisponibles.FirstOrDefault();
@@ -172,6 +203,10 @@ namespace Skillmap.ViewModels
             }
         }
 
+        /// <summary>
+        /// Actualiza propiedades relacionadas al cambiar el estado de <c>EsAdmin</c>.
+        /// </summary>
+        /// <param name="value">Nuevo valor de EsAdmin.</param>
         partial void OnEsAdminChanged(bool value)
         {
             OnPropertyChanged(nameof(rolesDisponibles));
