@@ -9,17 +9,30 @@ using SkillmapLib1.Models.DTO.InputDTO;
 
 namespace SkillmapApi.Controllers
 {
+    /// <summary>
+    /// Controlador que gestiona las materias (subjects) del sistema.
+    /// Proporciona endpoints para crear, consultar, actualizar y eliminar materias, y relacionarlas con docentes.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SubjectController : ControllerBase
     {
         private readonly DataContext _dataContext;
 
+        /// <summary>
+        /// Constructor que recibe el contexto de datos para el acceso a la base de datos.
+        /// </summary>
+        /// <param name="dataContext">Instancia del contexto de datos.</param>
         public SubjectController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
 
+        /// <summary>
+        /// Obtiene todas las materias con su información de docente, si existe.
+        /// Requiere que el usuario esté autenticado y tenga un rol válido.
+        /// </summary>
+        /// <returns>Lista de <see cref="SubjectOutputDTO"/> con datos de materia y docente.</returns>
         [HttpGet]
         public async Task<ActionResult<List<Subject>>> Get()
         {
@@ -52,6 +65,11 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Obtiene una materia específica por su ID.
+        /// </summary>
+        /// <param name="id">ID de la materia.</param>
+        /// <returns>Objeto <see cref="Subject"/> si existe; 404 si no se encuentra.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Subject>> Get(int id)
         {
@@ -65,6 +83,12 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Crea una nueva materia asignándola a un docente.
+        /// Solo puede ser ejecutado por Admins o Teachers.
+        /// </summary>
+        /// <param name="data">Datos de la materia a crear.</param>
+        /// <returns>Materia creada o mensaje de error.</returns>
         [Authorize(Roles = "Admin,Teacher")]
         [HttpPost]
         public async Task<ActionResult<Subject>> Post([FromBody] SubjectInputDTO data)
@@ -86,6 +110,13 @@ namespace SkillmapApi.Controllers
             return Ok(subject);
         }
 
+        /// <summary>
+        /// Actualiza los datos de una materia existente.
+        /// Solo permitido para Admins o Teachers.
+        /// </summary>
+        /// <param name="id">ID de la materia a actualizar.</param>
+        /// <param name="data">Datos actualizados.</param>
+        /// <returns>Materia actualizada o mensaje de error.</returns>
         [Authorize(Roles = "Admin,Teacher")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Subject>> Put(int id, [FromBody] SubjectInputDTO data)
@@ -113,6 +144,12 @@ namespace SkillmapApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Elimina una materia por su ID.
+        /// Solo permitido para Admins o Teachers.
+        /// </summary>
+        /// <param name="id">ID de la materia a eliminar.</param>
+        /// <returns>Materia eliminada o mensaje de error.</returns>
         [Authorize(Roles = "Admin,Teacher")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Subject>> Delete(int id)

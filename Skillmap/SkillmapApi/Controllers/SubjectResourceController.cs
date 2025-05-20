@@ -9,17 +9,29 @@ using SkillmapLib1.Models.DTO.InputDTO;
 
 namespace SkillmapApi.Controllers
 {
+    /// <summary>
+    /// Controlador encargado de manejar la relación entre materias y recursos.
+    /// Permite crear, consultar y eliminar asignaciones de recursos a materias.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class SubjectResourceController : ControllerBase
     {
         private readonly DataContext _dataContext;
 
+        /// <summary>
+        /// Constructor que recibe el contexto de base de datos.
+        /// </summary>
+        /// <param name="dataContext">Instancia del contexto inyectado.</param>
         public SubjectResourceController(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
 
+        /// <summary>
+        /// Obtiene todas las relaciones entre materias y recursos.
+        /// </summary>
+        /// <returns>Lista completa de <see cref="SubjectResource"/>.</returns>
         [HttpGet]
         public async Task<List<SubjectResource>> Get()
         {
@@ -29,6 +41,12 @@ namespace SkillmapApi.Controllers
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// Obtiene una relación específica entre materia y recurso por sus IDs.
+        /// </summary>
+        /// <param name="idMateria">ID de la materia.</param>
+        /// <param name="idRecurso">ID del recurso.</param>
+        /// <returns>Objeto <see cref="SubjectResource"/> si existe.</returns>
         [HttpGet("{idMateria}/{idRecurso}")]
         public async Task<ActionResult<SubjectResource>> Get(int idMateria, int idRecurso)
         {
@@ -43,6 +61,12 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Crea una nueva relación entre materia y recurso.
+        /// Solo permitido para Admins o Docentes.
+        /// </summary>
+        /// <param name="dto">Datos de entrada con IDs de materia y recurso.</param>
+        /// <returns>Relación creada o error si alguno no existe.</returns>
         [Authorize(Roles = "Admin,Teacher")]
         [HttpPost]
         public async Task<ActionResult<SubjectResource>> Post([FromBody] SubjectResourceInputDTO dto)
@@ -50,7 +74,6 @@ namespace SkillmapApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(dto);
 
-            // Validación opcional: asegurarse que existen
             var subjectExists = await _dataContext.Subjects.AnyAsync(s => s.ID_Subject == dto.ID_Subject);
             var resourceExists = await _dataContext.ResourcesItems.AnyAsync(r => r.Id == dto.ID_Resource);
 
@@ -69,6 +92,13 @@ namespace SkillmapApi.Controllers
             return Ok(relation);
         }
 
+        /// <summary>
+        /// Elimina una relación entre materia y recurso por sus IDs.
+        /// Solo permitido para Admins o Docentes.
+        /// </summary>
+        /// <param name="idMateria">ID de la materia.</param>
+        /// <param name="idRecurso">ID del recurso.</param>
+        /// <returns>Relación eliminada o mensaje de error.</returns>
         [Authorize(Roles = "Admin,Teacher")]
         [HttpDelete("{idMateria}/{idRecurso}")]
         public async Task<ActionResult<SubjectResource>> Delete(int idMateria, int idRecurso)
@@ -91,6 +121,11 @@ namespace SkillmapApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Obtiene todos los recursos relacionados con una materia específica.
+        /// </summary>
+        /// <param name="id">ID de la materia.</param>
+        /// <returns>Lista de <see cref="ResourcePerSubjectOutputDTO"/> con datos combinados del recurso y su docente.</returns>
         [HttpGet("subject/{id}")]
         public async Task<ActionResult<List<ResourcePerSubjectOutputDTO>>> GetResourcesBySubject(int id)
         {

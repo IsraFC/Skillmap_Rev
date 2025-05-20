@@ -1,65 +1,58 @@
-﻿using System.Net.NetworkInformation;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SkillmapLib1.Models;
 
 namespace SkillmapApi.Data
 {
+    /// <summary>
+    /// Clase encargada de poblar la base de datos con datos iniciales (usuarios, roles, materias, recursos, etc.).
+    /// Esta clase es útil para entornos de desarrollo y pruebas.
+    /// </summary>
     public class Seeder
     {
+        /// <summary>
+        /// Método principal que ejecuta el seeding si las tablas correspondientes están vacías.
+        /// </summary>
         public static async Task Seed(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, DataContext dataContext)
         {
             if (!dataContext.Roles.Any())
-            {
                 await AddRoleAsync(roleManager);
-            }
+
             if (!dataContext.Users.Any())
-            {
                 await AddUserAsync(userManager);
-            }
+
             if (!dataContext.ResourcesItems.Any())
-            {
                 await AddResourcesAsync(dataContext);
-            }
+
             if (!dataContext.Subjects.Any())
-            {
                 await AddSubjectsAsync(dataContext);
-            }
+
             if (!dataContext.SubjectResources.Any())
-            {
                 await AddSubjectResourcesAsync(dataContext);
-            }
+
             if (!dataContext.ResourceFeedbacks.Any())
-            {
                 await AddResourceFeedbackAsync(dataContext);
-            }
         }
 
-        private static async Task AddResourcesAsync(DataContext dataContext)
+        /// <summary>
+        /// Agrega roles predeterminados al sistema: Admin, Teacher y Student.
+        /// </summary>
+        private static async Task AddRoleAsync(RoleManager<IdentityRole> roleManager)
         {
-            // Verificamos si hay tipos de recurso, si no, se agrega uno
-            var resourceType = await dataContext.ResourceTypes.FirstOrDefaultAsync();
-            if (resourceType == null)
-            {
-                resourceType = new ResourceType() { Id_Resource_Type = "PDF"};
-                await dataContext.ResourceTypes.AddAsync(resourceType);
-                await dataContext.SaveChangesAsync();
-            }
+            if (!await roleManager.RoleExistsAsync("Admin"))
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
 
-            var item = new ResourcesItem
-            {
-                Title = ".NET MAUI",
-                Description = "Programacion en .NET MAUI para aplicaciones moviles",
-                Link = "https://Microsoft.com",
-                UploadDate = DateTime.Now,
-                ResourceTypeId = resourceType.Id_Resource_Type
-            };
+            if (!await roleManager.RoleExistsAsync("Teacher"))
+                await roleManager.CreateAsync(new IdentityRole("Teacher"));
 
-            await dataContext.ResourcesItems.AddAsync(item);
-            await dataContext.SaveChangesAsync();
+            if (!await roleManager.RoleExistsAsync("Student"))
+                await roleManager.CreateAsync(new IdentityRole("Student"));
         }
 
-        private static async Task AddUserAsync(UserManager<User> userManager )
+        /// <summary>
+        /// Crea usuarios predeterminados con distintos roles (Admin, Teacher, Student).
+        /// </summary>
+        private static async Task AddUserAsync(UserManager<User> userManager)
         {
             var user = new User
             {
@@ -72,18 +65,8 @@ namespace SkillmapApi.Data
             };
 
             var result = await userManager.CreateAsync(user, "Adm1234#");
-
             if (result.Succeeded)
-            {
                 await userManager.AddToRoleAsync(user, "Admin");
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    Console.WriteLine($"- {error.Description}");
-                }
-            }
 
             var user2 = new User
             {
@@ -95,19 +78,8 @@ namespace SkillmapApi.Data
                 EmailConfirmed = true
             };
 
-            var result2 = await userManager.CreateAsync(user2, "Tch1234#");
-
-            if (result2.Succeeded)
-            {
+            if ((await userManager.CreateAsync(user2, "Tch1234#")).Succeeded)
                 await userManager.AddToRoleAsync(user2, "Teacher");
-            }
-            else
-            {
-                foreach (var error in result2.Errors)
-                {
-                    Console.WriteLine($"- {error.Description}");
-                }
-            }
 
             var user3 = new User
             {
@@ -119,39 +91,39 @@ namespace SkillmapApi.Data
                 EmailConfirmed = true
             };
 
-            var result3 = await userManager.CreateAsync(user3, "Std1234#");
-
-            if (result3.Succeeded)
-            {
+            if ((await userManager.CreateAsync(user3, "Std1234#")).Succeeded)
                 await userManager.AddToRoleAsync(user3, "Student");
-            }
-            else
-            {
-                foreach (var error in result3.Errors)
-                {
-                    Console.WriteLine($"- {error.Description}");
-                }
-            }
         }
 
-        private static async Task AddRoleAsync(RoleManager<IdentityRole> roleManager)
+        /// <summary>
+        /// Agrega un recurso educativo de ejemplo y su tipo (PDF).
+        /// </summary>
+        private static async Task AddResourcesAsync(DataContext dataContext)
         {
-            if(!await roleManager.RoleExistsAsync("Admin"))
+            var resourceType = await dataContext.ResourceTypes.FirstOrDefaultAsync();
+            if (resourceType == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                resourceType = new ResourceType { Id_Resource_Type = "PDF" };
+                await dataContext.ResourceTypes.AddAsync(resourceType);
+                await dataContext.SaveChangesAsync();
             }
 
-            if (!await roleManager.RoleExistsAsync("Teacher"))
+            var item = new ResourcesItem
             {
-                await roleManager.CreateAsync(new IdentityRole("Teacher"));
-            }
+                Title = ".NET MAUI",
+                Description = "Programación en .NET MAUI para aplicaciones móviles",
+                Link = "https://Microsoft.com",
+                UploadDate = DateTime.Now,
+                ResourceTypeId = resourceType.Id_Resource_Type
+            };
 
-            if (!await roleManager.RoleExistsAsync("Student"))
-            {
-                await roleManager.CreateAsync(new IdentityRole("Student"));
-            }
+            await dataContext.ResourcesItems.AddAsync(item);
+            await dataContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Crea una materia ejemplo asignada al primer usuario registrado como docente.
+        /// </summary>
         private static async Task AddSubjectsAsync(DataContext dataContext)
         {
             var teacher = await dataContext.Users.FirstOrDefaultAsync();
@@ -159,9 +131,9 @@ namespace SkillmapApi.Data
             {
                 var subject = new Subject
                 {
-                    Name = "Aplicaciones Moviles I",
+                    Name = "Aplicaciones Móviles I",
                     Semester = "6° Semestre",
-                    ID_Teacher = teacher.Id,
+                    ID_Teacher = teacher.Id
                 };
 
                 await dataContext.Subjects.AddAsync(subject);
@@ -169,11 +141,11 @@ namespace SkillmapApi.Data
             }
         }
 
+        /// <summary>
+        /// Crea la relación entre una materia y un recurso si ambos existen.
+        /// </summary>
         private static async Task AddSubjectResourcesAsync(DataContext dataContext)
         {
-            if (await dataContext.SubjectResources.AnyAsync())
-                return;
-
             var subject = await dataContext.Subjects.FirstOrDefaultAsync();
             var resource = await dataContext.ResourcesItems.FirstOrDefaultAsync();
 
@@ -188,17 +160,13 @@ namespace SkillmapApi.Data
                 await dataContext.SubjectResources.AddAsync(subjectResource);
                 await dataContext.SaveChangesAsync();
             }
-            else
-            {
-                Console.WriteLine("No se encontró una materia o recurso para asociar.");
-            }
         }
 
+        /// <summary>
+        /// Agrega un comentario (feedback) de ejemplo entre un usuario y un recurso.
+        /// </summary>
         private static async Task AddResourceFeedbackAsync(DataContext dataContext)
         {
-            if (await dataContext.ResourceFeedbacks.AnyAsync())
-                return;
-
             var user = await dataContext.Users.FirstOrDefaultAsync();
             var resource = await dataContext.ResourcesItems.FirstOrDefaultAsync();
 
@@ -206,17 +174,13 @@ namespace SkillmapApi.Data
             {
                 var feedback = new ResourceFeedback
                 {
-                    ID_User = user.Id, 
+                    ID_User = user.Id,
                     ID_Resource = resource.Id,
                     Feedback = "Este recurso fue muy útil para el examen final."
                 };
 
                 await dataContext.ResourceFeedbacks.AddAsync(feedback);
                 await dataContext.SaveChangesAsync();
-            }
-            else
-            {
-                Console.WriteLine("No se encontró un usuario o recurso para asociar con feedback.");
             }
         }
     }

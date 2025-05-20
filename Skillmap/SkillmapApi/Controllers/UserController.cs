@@ -7,22 +7,34 @@ using SkillmapLib1.Models.DTO.InputDTO;
 
 namespace SkillmapApi.Controllers
 {
+    /// <summary>
+    /// Controlador encargado de gestionar los usuarios del sistema.
+    /// Permite obtener datos del usuario autenticado, listar todos los usuarios,
+    /// crear, actualizar y eliminar usuarios (principalmente administradores).
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// Constructor que recibe el gestor de usuarios inyectado.
+        /// </summary>
+        /// <param name="userManager">Instancia de <see cref="UserManager{User}"/>.</param>
         public UserController(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Obtiene la información del usuario actualmente autenticado, incluyendo su rol.
+        /// </summary>
+        /// <returns>Datos del usuario autenticado como <see cref="UserWithRoleOutputDTO"/>.</returns>
         [HttpGet("me")]
         public async Task<ActionResult<UserWithRoleOutputDTO>> GetCurrentUser()
         {
             var userName = User.Identity?.Name;
-
             if (string.IsNullOrEmpty(userName))
                 return Unauthorized();
 
@@ -44,6 +56,10 @@ namespace SkillmapApi.Controllers
             });
         }
 
+        /// <summary>
+        /// Obtiene una lista de todos los usuarios registrados con sus roles asignados.
+        /// </summary>
+        /// <returns>Lista de <see cref="UserWithRoleOutputDTO"/>.</returns>
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<UserWithRoleOutputDTO>>> GetAllUsers()
         {
@@ -68,6 +84,11 @@ namespace SkillmapApi.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Crea un nuevo usuario en el sistema y le asigna un rol.
+        /// Solo permitido para administradores.
+        /// </summary>
+        /// <param name="dto">Datos del usuario a crear.</param>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateUser(UserInputDTO dto)
@@ -95,6 +116,11 @@ namespace SkillmapApi.Controllers
             return Ok("Usuario creado correctamente");
         }
 
+        /// <summary>
+        /// Actualiza los datos personales y rol de un usuario existente.
+        /// Requiere autenticación del usuario.
+        /// </summary>
+        /// <param name="dto">Datos del usuario actualizados.</param>
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO dto)
@@ -103,7 +129,6 @@ namespace SkillmapApi.Controllers
             if (user == null)
                 return NotFound("Usuario no encontrado");
 
-            // Actualizar valores
             user.Name = dto.Name;
             user.Father_LastName = dto.Father_LastName;
             user.Mother_LastName = dto.Mother_LastName;
@@ -123,6 +148,11 @@ namespace SkillmapApi.Controllers
             return Ok("Usuario actualizado correctamente");
         }
 
+        /// <summary>
+        /// Elimina un usuario por su nombre de usuario.
+        /// Solo permitido para administradores.
+        /// </summary>
+        /// <param name="username">Nombre del usuario a eliminar.</param>
         [HttpDelete("{username}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string username)

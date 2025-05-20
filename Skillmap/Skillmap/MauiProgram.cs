@@ -4,11 +4,21 @@ using Skillmap.Views;
 
 namespace Skillmap
 {
+    /// <summary>
+    /// Clase responsable de configurar y construir la aplicación MAUI.
+    /// Registra servicios, páginas y configuración general como fuentes y logging.
+    /// </summary>
     public static class MauiProgram
     {
+        /// <summary>
+        /// Crea y configura la aplicación MAUI, incluyendo inyección de dependencias y servicios HTTP.
+        /// </summary>
+        /// <returns>Instancia construida de <see cref="MauiApp"/>.</returns>
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
+            // Configura la app principal
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -17,30 +27,30 @@ namespace Skillmap
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-            //  HttpClient configurado para apuntar al Web API de Skillmap
-            //builder.Services.AddHttpClient<HttpService>(client =>
-            //{
-            //    client.BaseAddress = new Uri("https://localhost:7163/");
-            //});
-
+            /// <summary>
+            /// Configura HttpClient para apuntar a la dirección del Web API.
+            /// Este cliente se inyecta a HttpService y es compartido por toda la aplicación.
+            /// </summary>
             builder.Services.AddSingleton<HttpClient>(sp =>
             {
                 return new HttpClient
                 {
-                    BaseAddress = new Uri("http://192.168.0.170:7163/")
+                    BaseAddress = new Uri("http://172.16.6.184:7163/")
                 };
             });
 
-
-            // Registrar HttpService como Singleton para que mantenga el token
+            /// <summary>
+            /// Registra <see cref="HttpService"/> como singleton para mantener el token y reutilizar el cliente.
+            /// </summary>
             builder.Services.AddSingleton<HttpService>();
 
-            // Registro de páginas y sus ViewModels
+            /// <summary>
+            /// Registro de páginas y su inyección de dependencias para navegación.
+            /// </summary>
             builder.Services
                 .AddTransient<LoginPage>()
                 .AddTransient<MainPage>()
                 .AddTransient<AddSubjectPage>();
-
 
 #if DEBUG
             builder.Logging.AddDebug();
