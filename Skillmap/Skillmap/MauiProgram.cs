@@ -27,7 +27,7 @@ namespace Skillmap
             {
                 return new HttpClient
                 {
-                    BaseAddress = new Uri("http://192.168.1.125:7163/")
+                    BaseAddress = new Uri("http://192.168.0.170:7163/")
                 };
             });
 

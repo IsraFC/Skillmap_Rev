@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SkillmapLib1.Models.DTO.OutputDTO;
@@ -97,7 +96,7 @@ namespace SkillmapApi.Controllers
         }
 
         [HttpPut]
-        [Authorize (Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> UpdateUser(UpdateUserDTO dto)
         {
             var user = await _userManager.FindByNameAsync(dto.OldUserName);
