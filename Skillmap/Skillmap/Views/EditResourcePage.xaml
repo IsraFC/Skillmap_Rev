@@ -60,6 +60,19 @@
                            BackgroundColor="#eeeeee"
                            TextColor="Black"/>
 
+                    <Label Text="Imagen de Portada" FontSize="14" FontAttributes="Bold"/>
+
+                    <Image Source="{Binding ImagenParaMostrar}"
+                           HeightRequest="200"
+                           Aspect="AspectFit"
+                           BackgroundColor="#f0f0f0"/>
+
+                    <Button Text="📷 Cambiar Foto"
+                            Command="{Binding CambiarImagenCommand}"
+                            BackgroundColor="#512BD4"
+                            TextColor="White"
+                            CornerRadius="10"/>
+                    
                     <!-- Pickers -->
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
                         <VerticalStackLayout Grid.Column="0">

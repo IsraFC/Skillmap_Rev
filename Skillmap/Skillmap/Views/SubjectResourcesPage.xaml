@@ -42,21 +42,43 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border BackgroundColor="White" StrokeShape="RoundRectangle 15" Padding="10" Margin="5">
-                            <VerticalStackLayout Spacing="5">
-                                <Label Text="{Binding ResourceTitle}"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="Black" />
-                                <Label Text="{Binding UploadDate, StringFormat='Publicado el {0:dd/MM/yyyy}'}"
-                                       FontSize="14"
-                                       TextColor="Gray"/>
-                                <Button Text="Ver más"
-                                        Command="{Binding BindingContext.VerMasCommand, Source={x:Reference SubjectResourcesPageRef}}"
-                                        CommandParameter="{Binding .}"
-                                        BackgroundColor="Black"
-                                        TextColor="White"
-                                        CornerRadius="10"/>
-                            </VerticalStackLayout>
+                            <Grid ColumnDefinitions="80, *">
+
+                                <Image Grid.Column="0"
+                                       Source="{Binding CoverImage, Converter={StaticResource Base64ToImageConverter}}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="80"
+                                       WidthRequest="80"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       Margin="0,0,10,0">
+                                    <Image.Clip>
+                                        <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40"/>
+                                    </Image.Clip>
+                                </Image>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                                    <Label Text="{Binding ResourceTitle}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="Black"
+                                           LineBreakMode="TailTruncation"/>
+
+                                    <Label Text="{Binding UploadDate, StringFormat='Publicado el {0:dd/MM/yyyy}'}"
+                                           FontSize="12"
+                                           TextColor="Gray"/>
+
+                                    <Button Text="Ver más"
+                                            Command="{Binding BindingContext.VerMasCommand, Source={x:Reference SubjectResourcesPageRef}}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="Black"
+                                            TextColor="White"
+                                            HeightRequest="35"
+                                            FontSize="12"
+                                            CornerRadius="10"
+                                            HorizontalOptions="Start"/>
+                                </VerticalStackLayout>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

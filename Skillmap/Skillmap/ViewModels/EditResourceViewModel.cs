@@ -51,6 +51,9 @@ namespace Skillmap.ViewModels
         [ObservableProperty] private string link;
         [ObservableProperty] private bool esPublico = true;
 
+        [ObservableProperty] private ImageSource imagenParaMostrar;
+        [ObservableProperty] private string? textoBase64Imagen;
+
         private List<SubjectResource> subjectResources = new();
 
         /// <summary>
@@ -86,6 +89,9 @@ namespace Skillmap.ViewModels
             Titulo = value.Title;
             Descripcion = value.Description;
             Link = value.Link;
+            TextoBase64Imagen = value.CoverImage;
+
+            CargarImagenDesdeBase64(value.CoverImage);
 
             TipoSeleccionado = Tipos.FirstOrDefault(t => t.Id_Resource_Type == value.ResourceTypeId);
 
@@ -93,6 +99,31 @@ namespace Skillmap.ViewModels
             MateriaSeleccionada = relacion != null
                 ? Materias.FirstOrDefault(m => m.Id_Subject == relacion.ID_Subject)
                 : null;
+        }
+
+        /// <summary>
+        /// Comando para cambiar la imagen del recurso.
+        /// </summary>
+        [RelayCommand]
+        public async Task CambiarImagen()
+        {
+            try
+            {
+                var result = await MediaPicker.Default.PickPhotoAsync();
+                if (result != null)
+                {
+                    // 1. Mostrar la nueva imagen en pantalla
+                    ImagenParaMostrar = ImageSource.FromFile(result.FullPath);
+
+                    // 2. Convertir a Base64 para guardarla
+                    byte[] imageArray = await File.ReadAllBytesAsync(result.FullPath);
+                    TextoBase64Imagen = Convert.ToBase64String(imageArray);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", "No se pudo cargar la imagen: " + ex.Message, "OK");
+            }
         }
 
         /// <summary>
@@ -110,7 +141,8 @@ namespace Skillmap.ViewModels
                 Description = Descripcion,
                 Link = Link,
                 UploadDate = DateTime.Now,
-                ResourceTypeId = TipoSeleccionado?.Id_Resource_Type ?? ""
+                ResourceTypeId = TipoSeleccionado?.Id_Resource_Type ?? "",
+                CoverImage = TextoBase64Imagen
             };
 
             var res = await _httpService.UpdateResource(actualizado.Id, actualizado);
@@ -155,6 +187,25 @@ namespace Skillmap.ViewModels
             await _httpService.DeleteResource(RecursoSeleccionado.Id);
             await Shell.Current.DisplayAlert("Listo", "Recurso eliminado correctamente", "OK");
             await Shell.Current.GoToAsync("..");
+        }
+
+        // Método auxiliar para mostrar la imagen desde texto
+        private void CargarImagenDesdeBase64(string base64)
+        {
+            if (string.IsNullOrEmpty(base64))
+            {
+                ImagenParaMostrar = null;
+                return;
+            }
+            try
+            {
+                byte[] bytes = Convert.FromBase64String(base64);
+                ImagenParaMostrar = ImageSource.FromStream(() => new MemoryStream(bytes));
+            }
+            catch
+            {
+                ImagenParaMostrar = null;
+            }
         }
     }
 }

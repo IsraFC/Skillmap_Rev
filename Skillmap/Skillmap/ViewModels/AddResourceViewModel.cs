@@ -34,6 +34,10 @@ namespace Skillmap.ViewModels
         [ObservableProperty] private SubjectOutputDTO materiaSeleccionada;
         [ObservableProperty] private bool esPublico = true;
 
+        // Propiedades para la Imagen (MediaPicker)
+        [ObservableProperty] private ImageSource? imagenSeleccionada;
+        [ObservableProperty] private string? rutaImagen;
+
         /// <summary>
         /// Constructor que recibe el servicio HTTP para interactuar con la API.
         /// </summary>
@@ -62,6 +66,31 @@ namespace Skillmap.ViewModels
         }
 
         /// <summary>
+        /// Comando para abrir la galería y seleccionar una foto.
+        /// </summary>
+        [RelayCommand]
+        public async Task SeleccionarImagen()
+        {
+            try
+            {
+                var result = await MediaPicker.Default.PickPhotoAsync();
+
+                if (result != null)
+                {
+                    // Guardamos la ruta local para procesarla luego
+                    RutaImagen = result.FullPath;
+
+                    // Mostramos la imagen en pantalla
+                    ImagenSeleccionada = ImageSource.FromFile(result.FullPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", "No se pudo seleccionar la imagen: " + ex.Message, "OK");
+            }
+        }
+
+        /// <summary>
         /// Guarda un nuevo recurso educativo en la base de datos.
         /// Incluye validación de campos, creación del recurso y asociación con una materia.
         /// </summary>
@@ -80,14 +109,22 @@ namespace Skillmap.ViewModels
                 return;
             }
 
+            // Convertir la imagen a texto (Base64) si existe
+            string? fotoBase64 = null;
+            if (!string.IsNullOrEmpty(RutaImagen))
+            {
+                fotoBase64 = await ConvertirImagenABase64(RutaImagen);
+            }
+
             // Se crea el objeto del recurso con los datos proporcionados
             var nuevo = new ResourcesItem
             {
                 Title = Titulo,
                 Description = Descripcion,
-                Link = Link,
+                Link = Link ?? "",
                 UploadDate = DateTime.Now,
-                ResourceTypeId = TipoSeleccionado.Id_Resource_Type
+                ResourceTypeId = TipoSeleccionado.Id_Resource_Type,
+                CoverImage = fotoBase64
             };
 
             // Se envía a la API para crear el recurso
@@ -109,13 +146,27 @@ namespace Skillmap.ViewModels
             var resp = await _httpService.CreateSubjectResource(relacion);
             if (!resp.IsSuccessStatusCode)
             {
-                await Shell.Current.DisplayAlert("Error", "El recurso se creó, pero no se pudo vincular a una materia", "OK");
+                await Shell.Current.DisplayAlert("Advertencia", "El recurso se creó, pero no se pudo vincular a una materia", "OK");
                 return;
             }
 
             // Confirmación de éxito y navegación hacia atrás
             await Shell.Current.DisplayAlert("Éxito", "Recurso guardado correctamente", "OK");
             await Shell.Current.GoToAsync("..");
+        }
+
+        // Método auxiliar para convertir archivo de imagen a string Base64
+        private async Task<string> ConvertirImagenABase64(string path)
+        {
+            try
+            {
+                byte[] imageArray = await File.ReadAllBytesAsync(path);
+                return Convert.ToBase64String(imageArray);
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
