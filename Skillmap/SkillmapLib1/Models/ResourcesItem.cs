@@ -28,7 +28,6 @@ namespace SkillmapLib1.Models
 
         // Relación con el tipo de recurso
         [ForeignKey("ResourceType")]
-        public int ResourceTypeId { get; set; }
-        public ResourceType ResourceType { get; set; } = null!;
+        public string ResourceTypeId { get; set; } = string.Empty;
     }
 }

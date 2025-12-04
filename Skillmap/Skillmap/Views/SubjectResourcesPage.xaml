@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
+             x:Class="Skillmap.Views.SubjectResourcesPage"
+             x:Name="SubjectResourcesPageRef"
+             Title="Recursos por Materia"
+             BackgroundColor="#ECECEC"
+             Shell.TabBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:SubjectResourcesViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15">
+
+            <!-- Título de la materia -->
+            <Label Text="{Binding NombreDocente}"
+                   FontSize="16"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
+
+            <!-- Nombre del docente -->
+            <Label x:Name="TeacherNameLabel"
+                   FontSize="16"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
+
+            <!-- Barra de búsqueda -->
+            <SearchBar Placeholder="Buscar recursos..."
+                       Text="{Binding TextoBusqueda, Mode=TwoWay}"
+                       BackgroundColor="#EFEFEF"
+                       TextColor="Black"
+                       Margin="0,10"/>
+
+            <!-- Lista de recursos -->
+            <CollectionView ItemsSource="{Binding RecursosFiltrados}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 15" Padding="10" Margin="5">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding ResourceTitle}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="Black" />
+                                <Label Text="{Binding UploadDate, StringFormat='Publicado el {0:dd/MM/yyyy}'}"
+                                       FontSize="14"
+                                       TextColor="Gray"/>
+                                <Button Text="Ver más"
+                                        Command="{Binding BindingContext.VerMasCommand, Source={x:Reference SubjectResourcesPageRef}}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="Black"
+                                        TextColor="White"
+                                        CornerRadius="10"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

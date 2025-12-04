@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
+             x:Class="Skillmap.Views.LoginPage"
+             x:Name="LoginPageRef"
+             Title="Iniciar Sesión"
+             BackgroundColor="#ECECEC"
+             Shell.TabBarIsVisible="False">
+
+    <ContentPage.BindingContext>
+        <viewmodels:LoginViewModel />
+    </ContentPage.BindingContext>
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 🔹 Sección superior con logo -->
+        <VerticalStackLayout Grid.Row="0" VerticalOptions="Center" Spacing="1">
+            <Border StrokeShape="RoundRectangle 1100" BackgroundColor="White"
+                    StrokeThickness="2" WidthRequest="120" HeightRequest="120"
+                    Padding="10">
+                <Image Source="logo.png"
+                       WidthRequest="100"
+                       HeightRequest="100"
+                       Aspect="AspectFit"/>
+            </Border>
+            <Label Text="Bienvenido a Skillmap"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <!-- 🔹 Sección inferior con formulario -->
+        <VerticalStackLayout Grid.Row="1" Spacing="15" HorizontalOptions="Center"
+                             Padding="20" BackgroundColor="White" 
+                             Margin="0,20,0,0">
+
+            <Label Text="Iniciar Sesión"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   HorizontalOptions="Center" Margin="0,10,0,0"/>
+
+            <Border StrokeShape="RoundRectangle 10" Stroke="Gray" StrokeThickness="1">
+                <Entry Placeholder="Correo Electrónico"
+                       Text="{Binding Email}"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       WidthRequest="250"
+                       Keyboard="Email"
+                       Margin="5"/>
+            </Border>
+
+            <Border StrokeShape="RoundRectangle 10" Stroke="Gray" StrokeThickness="1">
+                <Entry Placeholder="Contraseña"
+                       Text="{Binding Password}"
+                       IsPassword="True"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       WidthRequest="250"
+                       Margin="5"/>
+            </Border>
+
+            <Button Text="Ingresar"
+                    Command="{Binding LoginCommand}"
+                    BackgroundColor="#e91d1d"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="45"
+                    WidthRequest="250"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Página de contenido para la sección de Favoritos -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Skillmap.ViewModels"
+             x:Class="Skillmap.Views.FavoritesPage"
+             x:Name="FavoritesPageRef"
+             Title="Favoritos"
+             BackgroundColor="#ECECEC">
+
+    <ContentPage.BindingContext>
+        <viewmodels:FavoritesViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20">
+
+            <!-- Encabezado -->
+            <Label Text="⭐ Mis Favoritos"
+           FontSize="24"
+           FontAttributes="Bold"
+           TextColor="Black"
+           HorizontalOptions="Center"/>
+
+            <!-- Barra de búsqueda -->
+            <SearchBar Placeholder="Buscar en favoritos..."
+               BackgroundColor="#EFEFEF"
+               TextColor="Black"
+               Margin="0,10,0,10"
+               Text="{Binding BusquedaTexto, Mode=TwoWay}"/>
+
+            <!-- Lista de favoritos -->
+            <CollectionView ItemsSource="{Binding FavoritosFiltrados}"
+                    SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="10"
+                        Margin="5">
+
+                            <!-- Contenido de cada favorito -->
+                            <Grid ColumnDefinitions="Auto, *">
+                                <StackLayout Grid.Column="1" Padding="10" Spacing="5">
+                                    <Label Text="{Binding Title}"
+                                    FontSize="18"
+                                    FontAttributes="Bold"
+                                    TextColor="Black"/>
+
+                                    <Label Text="{Binding UploadDate}"
+                                    FontSize="14"
+                                    TextColor="Gray"/>
+
+                                    <Button Text="Ver más"
+                                    BackgroundColor="Black"
+                                    TextColor="White"
+                                    HeightRequest="40"
+                                    FontSize="14"
+                                    CornerRadius="15"
+                                    Command="{Binding BindingContext.VerMasCommand, Source={x:Reference Name=FavoritesPageRef}}"
+                                    CommandParameter="{Binding .}"/>
+                                </StackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

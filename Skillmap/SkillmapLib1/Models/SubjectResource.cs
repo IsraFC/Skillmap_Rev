@@ -11,12 +11,12 @@ namespace SkillmapLib1.Models
     {
         // Clave foránea a la materia
         [ForeignKey("Subject")]
-        public int ID_Materia { get; set; }
+        public int ID_Subject { get; set; }
         public Subject Subject { get; set; } = null!;
 
         // Clave foránea al recurso
         [ForeignKey("ResourceItem")]
-        public int ID_Recurso { get; set; }
+        public int ID_Resource { get; set; }
         public ResourcesItem ResourceItem { get; set; } = null!;
     }
 }

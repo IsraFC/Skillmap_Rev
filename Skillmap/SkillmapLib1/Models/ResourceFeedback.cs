@@ -6,20 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace SkillmapLib1.Models
 {
+    [PrimaryKey(nameof(ID_Resource),nameof(ID_User))]
     public class ResourceFeedback
     {
         // Clave foránea al recurso
-        [ForeignKey("ResourceItem")]
-        public int ID_Recurso { get; set; }
-        public ResourcesItem ResourceItem { get; set; } = null!;
+        public int ID_Resource { get; set; }
 
         // Clave foránea al usuario
-        [ForeignKey("User")]
-        public int ID_Usuario { get; set; } 
-        public User User { get; set; } = null!;
+        public string ID_User { get; set; } = string.Empty;
+
+        [NotMapped]
+        public string? UserName { get; set; }
 
         // Comentario o retroalimentación
         [MaxLength(500)]
