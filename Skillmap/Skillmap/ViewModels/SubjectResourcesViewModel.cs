@@ -5,6 +5,9 @@ using SkillmapLib1.Models;
 using SkillmapLib1.Models.DTO.OutputDTO;
 using System.Collections.ObjectModel;
 using Skillmap.Views;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace Skillmap.ViewModels
 {
@@ -120,6 +123,99 @@ namespace Skillmap.ViewModels
                 Link = recurso.Link,
                 UploadDate = recurso.UploadDate
             }));
+        }
+
+        /// <summary>
+        /// Genera y descarga un PDF con la lista de recursos de esta materia.
+        /// (Versión corregida usando códigos Hexadecimales para evitar errores)
+        /// </summary>
+        [RelayCommand]
+        public async Task ExportarPDF()
+        {
+            if (RecursosFiltrados == null || !RecursosFiltrados.Any())
+            {
+                await Shell.Current.DisplayAlert("Aviso", "No hay recursos para generar el reporte.", "OK");
+                return;
+            }
+
+            try
+            {
+                QuestPDF.Settings.License = LicenseType.Community;
+
+                var documento = Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        // 1. Configuración usando HEXADECIMALES para evitar conflictos de Color
+                        page.Margin(2, Unit.Centimetre);
+                        page.PageColor("#FFFFFF");
+                        page.DefaultTextStyle(x => x.FontSize(12));
+
+                        // 2. Encabezado
+                        page.Header().ShowOnce().Column(col =>
+                        {
+                            col.Item().Text("Reporte de Material Educativo").FontSize(20).Bold().FontColor("#1a73e8");
+                            col.Item().Text($"Materia: {NombreMateria}").FontSize(16).SemiBold();
+                            col.Item().Text(NombreDocente).FontSize(14).FontColor("#5f6368");
+                            col.Item().PaddingTop(10).LineHorizontal(1).LineColor("#E0E0E0");
+                        });
+
+                        // 3. Tabla
+                        page.Content().PaddingVertical(1, Unit.Centimetre).Table(table =>
+                        {
+                            table.ColumnsDefinition(columns =>
+                            {
+                                columns.RelativeColumn(3);
+                                columns.RelativeColumn(4);
+                                columns.ConstantColumn(80);
+                            });
+
+                            table.Header(header =>
+                            {
+                                header.Cell().Element(EstiloCelda).Text("Recurso").Bold();
+                                header.Cell().Element(EstiloCelda).Text("Descripción").Bold();
+                                header.Cell().Element(EstiloCelda).Text("Fecha").Bold();
+                            });
+
+                            foreach (var item in RecursosFiltrados)
+                            {
+                                table.Cell().Element(EstiloCelda).Text(item.ResourceTitle);
+                                table.Cell().Element(EstiloCelda).Text(item.Description);
+                                table.Cell().Element(EstiloCelda).Text(item.UploadDate.ToString("dd/MM/yyyy"));
+                            }
+                        });
+
+                        // 4. Pie de página
+                        page.Footer().AlignCenter().Text(x =>
+                        {
+                            x.Span("Página ");
+                            x.CurrentPageNumber();
+                            x.Span(" | Generado por SkillMap");
+                        });
+                    });
+                });
+
+                // Guardar y abrir
+                string nombreArchivo = $"Reporte_{NombreMateria.Replace(" ", "")}_{DateTime.Now:yyyyMMdd}.pdf";
+                string rutaArchivo = Path.Combine(FileSystem.CacheDirectory, nombreArchivo);
+
+                documento.GeneratePdf(rutaArchivo);
+
+                await Launcher.Default.OpenAsync(new OpenFileRequest
+                {
+                    Title = "Abrir Reporte PDF",
+                    File = new ReadOnlyFile(rutaArchivo)
+                });
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert("Error", "No se pudo crear el PDF: " + ex.Message, "OK");
+            }
+        }
+
+        static QuestPDF.Infrastructure.IContainer EstiloCelda(QuestPDF.Infrastructure.IContainer container)
+        {
+            return container.BorderBottom(1).BorderColor("#E0E0E0").PaddingVertical(5).PaddingHorizontal(2);
         }
     }
 }

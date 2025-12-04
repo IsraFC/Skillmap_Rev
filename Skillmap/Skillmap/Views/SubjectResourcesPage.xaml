@@ -12,6 +12,13 @@
         <viewmodels:SubjectResourcesViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="📄⬇️ PDF"
+                     Order="Primary"
+                     Priority="0"
+                     Command="{Binding ExportarPDFCommand}" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView>
         <VerticalStackLayout Padding="15">
 
