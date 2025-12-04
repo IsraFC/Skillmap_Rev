@@ -108,13 +108,26 @@ namespace SkillmapApi.Data
                 await dataContext.SaveChangesAsync();
             }
 
+            // Intenta leer la imagen local
+            string nombreImagen = "net_logo.png";
+            string rutaImagen = Path.Combine(Directory.GetCurrentDirectory(), nombreImagen);
+            string? imagenBase64 = null;
+
+            if (File.Exists(rutaImagen))
+            {
+                byte[] bytes = await File.ReadAllBytesAsync(rutaImagen);
+                imagenBase64 = Convert.ToBase64String(bytes);
+            }
+
             var item = new ResourcesItem
             {
                 Title = ".NET MAUI",
                 Description = "Programación en .NET MAUI para aplicaciones móviles",
                 Link = "https://Microsoft.com",
                 UploadDate = DateTime.Now,
-                ResourceTypeId = resourceType.Id_Resource_Type
+                ResourceTypeId = resourceType.Id_Resource_Type,
+
+                CoverImage = imagenBase64
             };
 
             await dataContext.ResourcesItems.AddAsync(item);

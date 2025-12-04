@@ -29,7 +29,10 @@ namespace Skillmap.ViewModels
         /// <summary>
         /// Materia actualmente seleccionada, cuyos recursos se están visualizando.
         /// </summary>
-        [ObservableProperty] public SubjectOutputDTO? materiaSeleccionada;
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(NombreDocente))]
+        [NotifyPropertyChangedFor(nameof(NombreMateria))]
+        private SubjectOutputDTO? materiaSeleccionada;
 
         /// <summary>
         /// Nombre de la materia seleccionada (solo lectura).

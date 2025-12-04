@@ -26,6 +26,8 @@ namespace SkillmapLib1.Models
         [Required]
         public DateTime UploadDate { get; set; }
 
+        public string? CoverImage { get; set; }
+
         // Relación con el tipo de recurso
         [ForeignKey("ResourceType")]
         public string ResourceTypeId { get; set; } = string.Empty;

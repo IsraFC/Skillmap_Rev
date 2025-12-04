@@ -17,6 +17,8 @@ namespace SkillmapLib1.Models.DTO.OutputDTO
         public string Link { get; set; } = string.Empty;
         public DateTime UploadDate { get; set; }
 
+        public string? CoverImage { get; set; }
+
         public string ResourceTypeId { get; set; } = string.Empty;
         public string TeacherFullName { get; set; } = string.Empty;
     }

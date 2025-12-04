@@ -143,6 +143,9 @@ namespace SkillmapApi.Controllers
                     Description = sr.ResourceItem.Description,
                     Link = sr.ResourceItem.Link,
                     UploadDate = sr.ResourceItem.UploadDate,
+
+                    CoverImage = sr.ResourceItem.CoverImage,
+
                     TeacherFullName = sr.Subject.Teacher.Name + " " + sr.Subject.Teacher.Father_LastName
                 })
                 .ToListAsync();

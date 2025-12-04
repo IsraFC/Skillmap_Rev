@@ -24,4 +24,13 @@ public partial class SubjectResourcesPage : ContentPage
             vm.CargarRecursosCommand.Execute(null);
         }
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is SubjectResourcesViewModel vm)
+        {
+            vm.CargarRecursosCommand.Execute(null);
+        }
+    }
 }

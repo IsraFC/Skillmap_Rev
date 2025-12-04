@@ -74,6 +74,18 @@
                         </VerticalStackLayout>
                     </Grid>
 
+                    <Label Text="Imagen de Portada (Opcional)" FontSize="14" FontAttributes="Bold"/>
+
+                    <Button Text="📷 Seleccionar Portada"
+                            Command="{Binding SeleccionarImagenCommand}"
+                            BackgroundColor="#512BD4"
+                            TextColor="White"
+                            CornerRadius="10"/>
+
+                    <Image Source="{Binding ImagenSeleccionada}"
+                           HeightRequest="200"
+                           Aspect="AspectFit"/>
+
                     <!-- Público -->
                     <HorizontalStackLayout>
                         <CheckBox IsChecked="{Binding EsPublico}"/>
